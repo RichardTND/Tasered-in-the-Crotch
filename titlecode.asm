@@ -14,6 +14,14 @@
                     sta fire_button
                     lda #$0b
                     sta $d011
+                    
+                    ldx #$00
+tsidout             lda #$00
+                    sta $d400,x
+                    inx
+                    cpx #$18
+                    bne tsidout 
+                    
                     ldx #$00
 tloop               ldy #$00
                     iny

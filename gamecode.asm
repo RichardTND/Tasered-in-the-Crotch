@@ -1967,7 +1967,7 @@ setup_fail_text
                 sbc score+1
                 lda hiscore 
                 sbc score 
-                bpl no_hiscore
+                bpl no_hiscore_recorded
                 
                 ldx #$00
 make_new_hi     lda score,x
@@ -1988,7 +1988,8 @@ new_hi_message  lda hiscoretxt,x
                 
                 ;Play GAME OVER jingle
                 
-no_hiscore      lda #game_over_jingle
+no_hiscore_recorded
+                lda #game_over_jingle
                 jsr music_init
 game_over_loop                
                 lda $dc00
@@ -2000,7 +2001,7 @@ game_over_loop
                 bit fire_button
                 ror fire_button
                 bmi game_over_loop
-                bvc no_hiscore
+                bvc game_over_loop
                 lda #0
                 sta fire_button
                 jmp check_hi_score

@@ -27,3 +27,10 @@ level_char_pos = $0411
 
 quota_char_pos = $07b1
 hiscore_char_pos = $07b9
+
+;Hi score table name entry 
+
+scorelength = 6
+namelength = 9
+listlength = 5
+

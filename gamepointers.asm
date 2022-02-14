@@ -383,33 +383,6 @@ complete5  !text "  i shall see you on your next shift,  "
 
 hiscoretxt !text " you have also acheived a new hi score "
 
-hof        !text "         tasered in the crotch         "
-           !text "        top five chief commanders       "
-hiscorestart
-rank1      !text "  1. "
-name1      !text "richard b"
-           !text " ................. "
-hiscore1   !text "000000 "
-rank2      !text "  2. "
-name2      !text "richard b"
-           !text " ................. "
-hiscore2   !text "000000 "
-rank3      !text "  3. "
-name3      !text "richard b"
-           !text " ................. "
-hiscore3   !text "000000 "
-rank4      !text "  4. "
-name4      !text "richard b"
-           !text " ................. "
-hiscore4   !text "000000 "
-rank5      !text "  5. "
-name5      !text "richard b"
-           !text " ................. "
-hiscore5   !text "000000 "
-
-hslo       !byte <hiscore1,<hiscore2,<hiscore3,<hiscore4,<hiscore5
-hshi       !byte >hiscore1,>hiscore2,>hiscore3,>hiscore4,>hiscore5
-
 
 ;----------------------------------------------------------
 
