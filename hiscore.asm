@@ -1,4 +1,15 @@
-﻿
+﻿;***************************************
+;
+;        TASERED IN THE CROTCH!
+;
+;     A fun game by Richard Bayliss
+;
+;       (C)2022 The New Dimension
+;
+;***************************************
+
+;HI SCORE DATA
+
 hslo       !byte <hiscore1,<hiscore2,<hiscore3,<hiscore4,<hiscore5
 hshi       !byte >hiscore1,>hiscore2,>hiscore3,>hiscore4,>hiscore5
 nmlo       !byte <name1,<name2,<name3,<name4,<name5

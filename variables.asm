@@ -1,4 +1,14 @@
-﻿;VARIABLES
+﻿;***************************************
+;
+;        TASERED IN THE CROTCH!
+;
+;     A fun game by Richard Bayliss
+;
+;       (C)2022 The New Dimension
+;
+;***************************************
+
+;VARIABLES
 
 ;Music parameters
 

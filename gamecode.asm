@@ -1,4 +1,15 @@
-﻿;GAME CODE
+﻿;***************************************
+;
+;        TASERED IN THE CROTCH!
+;
+;     A fun game by Richard Bayliss
+;
+;       (C)2022 The New Dimension
+;
+;***************************************
+
+;GAME CODE
+
 
 ;Switch off IRQs from title screen
 ;and clear SID chip.
@@ -94,10 +105,18 @@ score_reset     lda #$30
                 sta enemy2_dir
                 sta enemy4_dir
                 
+                lda #$02
+                sta enemy1_drag_speed
+                sta enemy1_drag_speed
+                sta enemy1_drag_speed
+                sta enemy1_drag_speed
+                sta enemy1_drag_speed
+                
+                
                 ;Initialise and setup IRQ raster interrupts
 
                 sei 
-                ldx #$fb
+                lda #$fb
                 tsx
                 ldx #<game_irq
                 ldy #>game_irq 
@@ -190,7 +209,9 @@ get_level_text
                 sbc #2 
                 sta level_char_pos+7
                 
-                
+                 lda #$30
+                sta escapees
+                sta escapees+1
                 ldx #$00
 fetch_quotas                
                 lda quota,x 
@@ -215,6 +236,7 @@ grloop1         ldy #$00
                 bne *-1
                 inx
                 bne grloop1
+                
                 jsr mask_panel
                 
                 
@@ -240,12 +262,12 @@ get_ready_loop
                 jmp drawgame
                 
                 
-initenemy  
-                jsr select_next_enemy1
-                jsr select_next_enemy2
-                jsr select_next_enemy3
-                jsr select_next_enemy4
-                jmp select_next_enemy5
+initenemy       jsr animate_and_move_enemy1+$42
+                jsr animate_and_move_enemy2+$42
+                jsr animate_and_move_enemy3+$42
+                jsr animate_and_move_enemy4+$42
+                jsr animate_and_move_enemy5+$45
+                rts
                 
 ;Zero fill all game pointers
             
@@ -666,136 +688,8 @@ enemy1_framesm  lda villain_object1
                 sta $07fa
 enemy1_coloursm lda #1
                 sta $d029
-                
-                ;Check drag status 
-                
-                lda enemy1_drag_enabled
-                cmp #1
-                beq half_speed_enemy1
-                jmp skip_enemy1_drag
-                
-half_speed_enemy1
-                lda enemy1_drag_speed 
-                cmp #2
-                beq enemy1_drag_ok
-                inc enemy1_drag_speed
+                +enemy_properties enemy1_drag_enabled, enemy1_drag_speed, enemy1_dir, objpos+4, objpos+5, enemy1_speed, enemy1_badenemy, enemy1_framesm, enemy1_coloursm, enemy1_scoretype  
                 rts
-enemy1_drag_ok 
-                lda #0
-                sta enemy1_drag_speed
-skip_enemy1_drag 
-                
-                ;Check direction enemy can move 
-                
-                lda enemy1_dir
-                cmp #1
-                beq enemy1_shiftright
-                
-                ;Move enemy to the left until reach boundary point 
-                
-                lda objpos+4
-                sec
-                sbc enemy1_speed
-                cmp #boundary_left 
-                bcs enemy1_update_x
-               
-                ;lda #0
-                ;sta objpos+5
-                
-                jsr select_next_enemy1
-                
-                rts
-enemy1_update_x 
-                sta objpos+4
-                rts
-       
-                ;Move enemy to the right until reach boundary point
-                
-enemy1_shiftright
-                lda objpos+4
-                clc
-                adc enemy1_speed 
-                cmp #boundary_right
-                bcc enemy1_update_x
-                jmp select_next_enemy1
-                
-                ;First random pointer to select enemy objects
-                
-select_next_enemy1
-
-                ;Enemy escaping. 
-                
-                ;First check if enemy Y position is offset
-                ;before perform check of enemy 
-                
-                lda objpos+5
-                beq just_select_next_enemy1
-                
-                ;Now test if enemy that has left the screen
-                ;is in fact a villain. If so, add 1 to the 
-                ;escapee list and then run the select next
-                ;enemy routine.
-                
-                lda enemy1_badenemy
-                beq just_select_next_enemy1
-                
-                ;Enemy has escaped, so do an enemy escaped 
-                ;subroutine.
-                
-                jsr an_enemy_has_escaped
-               
-just_select_next_enemy1                
-
-                ldx randompointer
-                lda enemy_select_table,x
-                sta enemy_set_pointer
-                lda enemy_y_pos_table,x
-                sta objpos+5
-                lda enemy_dir_select_table,x
-                sta enemy1_dir
-                
-                lda enemy_drag_speed_table,x
-                sta enemy1_drag_speed
-                lda enemy_drag_active_table,x
-                sta enemy1_drag_enabled
-                inx
-                cpx #enemy_select_table_end-enemy_select_table
-                beq loop
-                inc randompointer
-                jmp pick_new_enemy1
-loop            ldx #0
-                stx randompointer
-                
-                
-                ;Second random pointer to store the new properties 
-                
-pick_new_enemy1
-                ldy enemy_set_pointer
-                lda enemy_type_lo,y
-                sta enemy1_framesm+1
-                lda enemy_type_hi,y
-                sta enemy1_framesm+2
-                lda enemy_colour_table,y
-                sta enemy1_coloursm+1
-                lda enemy_bad_table,y
-                sta enemy1_badenemy
-                lda enemy_score_table,y
-                sta enemy1_scoretype
-                
-                lda enemy1_dir
-                beq store_enemy1_left
-              
-                
-                lda #$00
-                sta objpos+4
-                rts
-                
-store_enemy1_left
-                lda #$b2
-                sta objpos+4
-               
-                rts
-                
 ;--------------------------------------------------------------------------------
 
 ;Animate enemy 2 and also set its colour. Then check direction it is
@@ -807,134 +701,8 @@ enemy2_framesm  lda villain_object1
                 sta $07fb
 enemy2_coloursm lda #1
                 sta $d02a
-                
-                ;Check drag status 
-                
-                lda enemy2_drag_enabled
-                cmp #1
-                beq half_speed_enemy2
-                jmp skip_enemy2_drag
-                
-half_speed_enemy2
-                lda enemy2_drag_speed 
-                cmp #2
-                beq enemy2_drag_ok
-                inc enemy2_drag_speed
+                +enemy_properties enemy2_drag_enabled, enemy2_drag_speed, enemy2_dir, objpos+6, objpos+7, enemy2_speed, enemy2_badenemy, enemy2_framesm, enemy2_coloursm, enemy2_scoretype
                 rts
-enemy2_drag_ok 
-                lda #0
-                sta enemy2_drag_speed
-skip_enemy2_drag 
-                ;Check direction enemy can move 
-                
-                lda enemy2_dir
-                cmp #1
-                beq enemy2_shiftright
-                
-                ;Move enemy to the left until reach boundary point 
-                
-                lda objpos+6
-                sec
-                sbc enemy2_speed
-                cmp #boundary_left 
-                bcs enemy2_update_x
-                jsr select_next_enemy2
-                
-                ;lda #0
-                ;sta objpos+5
-                rts
-enemy2_update_x 
-                sta objpos+6
-                rts
-       
-                ;Move enemy to the right until reach boundary point
-                
-enemy2_shiftright
-                lda objpos+6
-                clc
-                adc enemy2_speed 
-                cmp #boundary_right
-                bcc enemy2_update_x
-                jmp select_next_enemy2
-                
-                ;First random pointer to select enemy objects
-                
-select_next_enemy2
-
-                ;Enemy escaping. 
-                
-                ;First check if enemy Y position is offset
-                ;before perform check of enemy 
-                
-                lda objpos+7
-                beq just_select_next_enemy2
-                
-                ;Now test if enemy that has left the screen
-                ;is in fact a villain. If so, add 1 to the 
-                ;escapee list and then run the select next
-                ;enemy routine.
-                
-                lda enemy2_badenemy
-                beq just_select_next_enemy2
-                
-                ;Enemy has escaped, so do an enemy escaped 
-                ;subroutine.
-                
-                jsr an_enemy_has_escaped
-               
-just_select_next_enemy2                
-                
-;select_next_enemy2
-                ldx randompointer
-                lda enemy_select_table,x
-                sta enemy_set_pointer
-                lda enemy_y_pos_table,x
-                sta objpos+7
-                lda enemy_dir_select_table,x
-                sta enemy2_dir
-                
-                lda enemy_drag_speed_table,x
-                sta enemy2_drag_speed
-                lda enemy_drag_active_table,x
-                sta enemy2_drag_enabled
-                inx
-                cpx #enemy_select_table_end-enemy_select_table
-                beq loop2
-                inc randompointer
-                jmp pick_new_enemy2
-loop2           ldx #0
-                stx randompointer
-                
-                
-                ;Second random pointer to store the new properties 
-                
-pick_new_enemy2
-                ldy enemy_set_pointer
-                lda enemy_type_lo,y
-                sta enemy2_framesm+1
-                lda enemy_type_hi,y
-                sta enemy2_framesm+2
-                lda enemy_colour_table,y
-                sta enemy2_coloursm+1
-                lda enemy_bad_table,y
-                sta enemy2_badenemy
-                lda enemy_score_table,y
-                sta enemy2_scoretype
-                
-                lda enemy2_dir
-                beq store_enemy2_left
-              
-                
-                lda #$00
-                sta objpos+6
-                rts
-                
-store_enemy2_left
-                lda #$b2
-                sta objpos+6
-               
-                rts
-                
 ;--------------------------------------------------------------------------------
 ;Animate enemy 3 and also set its colour. Then check direction it is
 ;allowed to move. Afterwards move the enemy that direction until it reaches
@@ -945,162 +713,33 @@ enemy3_framesm  lda villain_object1
                 sta $07fc
 enemy3_coloursm lda #1
                 sta $d02b
-                
-                ;Check drag status 
-                
-                lda enemy3_drag_enabled
-                cmp #1
-                beq half_speed_enemy3
-                jmp skip_enemy3_drag
-                
-half_speed_enemy3
-                lda enemy3_drag_speed 
-                cmp #2
-                beq enemy3_drag_ok
-                inc enemy3_drag_speed
+                +enemy_properties enemy3_drag_enabled, enemy3_drag_speed, enemy3_dir, objpos+8, objpos+9, enemy3_speed, enemy3_badenemy, enemy3_framesm, enemy3_coloursm, enemy3_scoretype  
                 rts
-enemy3_drag_ok 
-                lda #0
-                sta enemy3_drag_speed
-skip_enemy3_drag 
-                ;Check direction enemy can move 
-                
-                lda enemy3_dir
-                cmp #1
-                beq enemy3_shiftright
-                
-                ;Move enemy to the left until reach boundary point 
-                
-                lda objpos+8
-                sec
-                sbc enemy3_speed
-                cmp #boundary_left 
-                bcs enemy3_update_x
-                jsr select_next_enemy3
-                
-                ;lda #0
-                ;sta objpos+5
-                rts
-enemy3_update_x 
-                sta objpos+8
-                rts
-       
-                ;Move enemy to the right until reach boundary point
-                
-enemy3_shiftright
-                lda objpos+8
-                clc
-                adc enemy3_speed 
-                cmp #boundary_right
-                bcc enemy3_update_x
-                jmp select_next_enemy3
-                
-                ;First random pointer to select enemy objects
-                
-                                
-select_next_enemy3
-
-                ;Enemy escaping. 
-                
-                ;First check if enemy Y position is offset
-                ;before perform check of enemy 
-                
-                lda objpos+9
-                beq just_select_next_enemy3
-                
-                ;Now test if enemy that has left the screen
-                ;is in fact a villain. If so, add 1 to the 
-                ;escapee list and then run the select next
-                ;enemy routine.
-                
-                lda enemy3_badenemy
-                beq just_select_next_enemy3
-                
-                ;Enemy has escaped, so do an enemy escaped 
-                ;subroutine.
-                
-                jsr an_enemy_has_escaped
-               
-just_select_next_enemy3                
-
-                
-;select_next_enemy3
-                ldx randompointer
-                lda enemy_select_table,x
-                sta enemy_set_pointer
-                lda enemy_y_pos_table,x
-                sta objpos+9
-                lda enemy_dir_select_table,x
-                sta enemy3_dir
-                
-                lda enemy_drag_speed_table,x
-                sta enemy3_drag_speed
-                lda enemy_drag_active_table,x
-                sta enemy3_drag_enabled
-                inx
-                cpx #enemy_select_table_end-enemy_select_table
-                beq loop3
-                inc randompointer
-                jmp pick_new_enemy3
-loop3           ldx #0
-                stx randompointer
-                
-                
-                ;Second random pointer to store the new properties 
-                
-pick_new_enemy3
-                ldy enemy_set_pointer
-                lda enemy_type_lo,y
-                sta enemy3_framesm+1
-                lda enemy_type_hi,y
-                sta enemy3_framesm+2
-                lda enemy_colour_table,y
-                sta enemy3_coloursm+1
-                lda enemy_bad_table,y
-                sta enemy3_badenemy
-                lda enemy_score_table,y
-                sta enemy3_scoretype
-                
-                lda enemy3_dir
-                beq store_enemy3_left
-              
-                
-                lda #$00
-                sta objpos+8
-                rts
-                
-store_enemy3_left
-                lda #$b2
-                sta objpos+8
-               
-                rts
-                
 ;--------------------------------------------------------------------------------                
-                
-;An enemy escapes the crimescene. Add one to the value of
-;escapees. Then refresh the score panel with the new 
-;value.
+;--------------------------------------------------------------------------------
+;Animate enemy 4 and also set its colour. Then check direction it is
+;allowed to move. Afterwards move the enemy that direction until it reaches
+;the stop boundary.
 
-an_enemy_has_escaped
-               
-                inc escapees+1
-                lda escapees+1
-                cmp #$3a
-                bne just_refresh_panel
-                lda #$30
-                sta escapees+1
-                inc escapees
-just_refresh_panel                
-                lda escapees
-                cmp #$3a
-                beq escapees_default
-                jsr mask_panel
+animate_and_move_enemy4
+enemy4_framesm  lda villain_object1
+                sta $07fd
+enemy4_coloursm lda #1
+                sta $d02c
+                +enemy_properties enemy4_drag_enabled, enemy4_drag_speed, enemy4_dir, objpos+10, objpos+11, enemy4_speed, enemy4_badenemy, enemy4_framesm, enemy4_coloursm, enemy4_scoretype  
                 rts
-escapees_default
-                lda #$30
-                sta escapees
-                sta escapees+1
-                jsr mask_panel
+;--------------------------------------------------------------------------------                
+;--------------------------------------------------------------------------------
+;Animate enemy 5 and also set its colour. Then check direction it is
+;allowed to move. Afterwards move the enemy that direction until it reaches
+;the stop boundary.
+
+animate_and_move_enemy5
+enemy5_framesm  lda villain_object1
+                sta $07fe
+enemy5_coloursm lda #1
+                sta $d02d
+                +enemy_properties enemy5_drag_enabled, enemy5_drag_speed, enemy5_dir, objpos+12, objpos+13, enemy5_speed, enemy5_badenemy, enemy5_framesm, enemy5_coloursm, enemy5_scoretype  
                 rts
 ;--------------------------------------------------------------------------------
 ;Test enemy bomb. If the bomb is launched, it should move downwards, otherwise 
@@ -1218,35 +857,6 @@ animate_and_move_bomb
 update_bomb_y   sta objpos+15
                 rts
                 
-!macro enemy_bomb_arm enemyx, enemyy, enemytype {
-                
-                lda enemyx
-                cmp bomb_x_spawn_position
-                beq .checky
-                rts
-.checky        
-                lda enemyy
-                cmp bomb_y_spawn_position
-                beq .checktype
-                rts
-.checktype      lda enemytype
-                cmp #1 ;1 = bad enemies 
-                beq .launchbomb
-                rts 
-.launchbomb     lda enemyx
-                sta objpos+14
-                lda enemyy
-                sta objpos+15
-                lda #1
-                sta bomb_released
-                lda #<bomb_throw_sfx 
-                ldy #>bomb_throw_sfx
-                ldx #14
-                jsr sfx_play
-                
-              
-                rts
-}                
 enemy_ranges    jsr enemy1_to_bomb
                 jsr enemy2_to_bomb
                 jsr enemy3_to_bomb
@@ -1262,283 +872,6 @@ enemy5_to_bomb  +enemy_bomb_arm objpos+12, objpos+13, enemy5_badenemy
                
                 
 
-;--------------------------------------------------------------------------------
-;Animate enemy 1 and also set its colour. Then check direction it is
-;allowed to move. Afterwards move the enemy that direction until it reaches
-;the stop boundary.
-
-animate_and_move_enemy4
-enemy4_framesm  lda villain_object1
-                sta $07fd
-enemy4_coloursm lda #1
-                sta $d02c
-                
-                ;Check drag status 
-                
-                lda enemy4_drag_enabled
-                cmp #1
-                beq half_speed_enemy4
-                jmp skip_enemy4_drag
-                
-half_speed_enemy4
-                lda enemy4_drag_speed 
-                cmp #2
-                beq enemy4_drag_ok
-                inc enemy4_drag_speed
-                rts
-enemy4_drag_ok 
-                lda #0
-                sta enemy4_drag_speed
-skip_enemy4_drag 
-                
-                ;Check direction enemy can move 
-                
-                lda enemy4_dir
-                cmp #1
-                beq enemy4_shiftright
-                
-                ;Move enemy to the left until reach boundary point 
-                
-                lda objpos+10
-                sec
-                sbc enemy4_speed
-                cmp #boundary_left 
-                bcs enemy4_update_x
-                jsr select_next_enemy4
-                
-                ;lda #0
-                ;sta objpos+11
-                rts
-enemy4_update_x 
-                sta objpos+10
-                rts
-       
-                ;Move enemy to the right until reach boundary point
-                
-enemy4_shiftright
-                lda objpos+10
-                clc
-                adc enemy4_speed 
-                cmp #boundary_right
-                bcc enemy4_update_x
-                jmp select_next_enemy4
-                
-                
-                ;First random pointer to select enemy objects
-                
-                
-select_next_enemy4
-
-                ;Enemy escaping. 
-                
-                ;First check if enemy Y position is offset
-                ;before perform check of enemy 
-                
-                lda objpos+11
-                beq just_select_next_enemy4
-                
-                ;Now test if enemy that has left the screen
-                ;is in fact a villain. If so, add 1 to the 
-                ;escapee list and then run the select next
-                ;enemy routine.
-                
-                lda enemy4_badenemy
-                beq just_select_next_enemy4
-                
-                ;Enemy has escaped, so do an enemy escaped 
-                ;subroutine.
-                
-                jsr an_enemy_has_escaped
-               
-just_select_next_enemy4                
-
-                ldx randompointer
-                lda enemy_select_table,x
-                sta enemy_set_pointer
-                lda enemy_y_pos_table,x
-                sta objpos+11
-                lda enemy_dir_select_table,x
-                sta enemy4_dir
-                
-                lda enemy_drag_speed_table,x
-                sta enemy4_drag_speed
-                lda enemy_drag_active_table,x
-                sta enemy4_drag_enabled
-                inx
-                cpx #enemy_select_table_end-enemy_select_table
-                beq loop4
-                inc randompointer
-                jmp pick_new_enemy4
-loop4            ldx #0
-                stx randompointer
-                
-                
-                ;Second random pointer to store the new properties 
-                
-pick_new_enemy4
-                ldy enemy_set_pointer
-                lda enemy_type_lo,y
-                sta enemy4_framesm+1
-                lda enemy_type_hi,y
-                sta enemy4_framesm+2
-                lda enemy_colour_table,y
-                sta enemy4_coloursm+1
-                lda enemy_bad_table,y
-                sta enemy4_badenemy
-                lda enemy_score_table,y
-                sta enemy4_scoretype
-                
-                lda enemy4_dir
-                beq store_enemy4_left
-              
-                
-                lda #$00
-                sta objpos+10
-                rts
-                
-store_enemy4_left
-                lda #$b2
-                sta objpos+10
-               
-                rts
-                
-;--------------------------------------------------------------------------------                
-;--------------------------------------------------------------------------------
-;Animate enemy 1 and also set its colour. Then check direction it is
-;allowed to move. Afterwards move the enemy that direction until it reaches
-;the stop boundary.
-
-animate_and_move_enemy5
-enemy5_framesm  lda villain_object1
-                sta $07fe
-enemy5_coloursm lda #1
-                sta $d02d
-                
-                ;Check drag status 
-                
-                lda enemy5_drag_enabled
-                cmp #1
-                beq half_speed_enemy5
-                jmp skip_enemy5_drag
-                
-half_speed_enemy5
-                lda enemy5_drag_speed 
-                cmp #2
-                beq enemy5_drag_ok
-                inc enemy5_drag_speed
-                rts
-enemy5_drag_ok 
-                lda #0
-                sta enemy5_drag_speed
-skip_enemy5_drag 
-                ;Check direction enemy can move 
-                
-                lda enemy5_dir
-                cmp #1
-                beq enemy5_shiftright
-                
-                ;Move enemy to the left until reach boundary point 
-                
-                lda objpos+12
-                sec
-                sbc enemy5_speed
-                cmp #boundary_left 
-                bcs enemy5_update_x
-                jsr select_next_enemy5
-                
-                ;lda #0
-                ;sta objpos+13
-                rts
-enemy5_update_x 
-                sta objpos+12
-                rts
-       
-                ;Move enemy to the right until reach boundary point
-                
-enemy5_shiftright
-                lda objpos+12
-                clc
-                adc enemy5_speed 
-                cmp #boundary_right
-                bcc enemy5_update_x
-                jmp select_next_enemy5
-                
-                ;First random pointer to select enemy objects
-                
-                
-select_next_enemy5
-
-                ;Enemy escaping. 
-                
-                ;First check if enemy Y position is offset
-                ;before perform check of enemy 
-                
-                lda objpos+13
-                beq just_select_next_enemy5
-                
-                ;Now test if enemy that has left the screen
-                ;is in fact a villain. If so, add 1 to the 
-                ;escapee list and then run the select next
-                ;enemy routine.
-                
-                lda enemy5_badenemy
-                beq just_select_next_enemy5
-                
-                ;Enemy has escaped, so do an enemy escaped 
-                ;subroutine.
-                
-                jsr an_enemy_has_escaped
-               
-just_select_next_enemy5                
-                ldx randompointer
-                lda enemy_select_table,x
-                sta enemy_set_pointer
-                lda enemy_y_pos_table,x
-                sta objpos+13
-                lda enemy_dir_select_table,x
-                sta enemy5_dir
-                lda enemy_drag_speed_table,x
-                sta enemy5_drag_speed
-                lda enemy_drag_active_table,x
-                sta enemy5_drag_enabled
-                inx
-                cpx #enemy_select_table_end-enemy_select_table
-                beq loop5
-                inc randompointer
-                jmp pick_new_enemy5
-loop5            ldx #0
-                stx randompointer
-                
-                
-                ;Second random pointer to store the new properties 
-                
-pick_new_enemy5
-                ldy enemy_set_pointer
-                lda enemy_type_lo,y
-                sta enemy5_framesm+1
-                lda enemy_type_hi,y
-                sta enemy5_framesm+2
-                lda enemy_colour_table,y
-                sta enemy5_coloursm+1
-                lda enemy_bad_table,y
-                sta enemy5_badenemy
-                lda enemy_score_table,y
-                sta enemy5_scoretype
-                
-                lda enemy5_dir
-                beq store_enemy5_left
-              
-                
-                lda #$00
-                sta objpos+12
-                rts
-                
-store_enemy5_left
-                lda #$b2
-                sta objpos+12
-               
-                rts
-                
 ;--------------------------------------------------------------------------------                
 
 ;Taser to enemy collision 
@@ -1890,6 +1223,34 @@ levelsm7        lda LEVEL1_Escapee_Count,x
                 rts                   
                 
 ;--------------------------------------------------------------------------------
+
+;An enemy escapes the crimescene. Add one to the value of
+;escapees. Then refresh the score panel with the new 
+;value.
+
+an_enemy_has_escaped
+               
+                inc escapees+1
+                lda escapees+1
+                cmp #$3a
+                bne just_refresh_panel
+                lda #$30
+                sta escapees+1
+                inc escapees
+just_refresh_panel                
+                lda escapees
+                cmp #$3a
+                beq escapees_default
+                jsr mask_panel
+                rts
+escapees_default
+                lda #$30
+                sta escapees
+                sta escapees+1
+                jsr mask_panel
+                rts                
+                
+;--------------------------------------------------------------------------------
 ;Three civilians have been wrongfully tasered, or a bomb hits the police force. 
 ;If this happens, a life is lost.
 
@@ -2073,6 +1434,9 @@ puttarget       lda quota,x
                 sbc #2
                 sta lives_char_pos
                 rts
+                
+;Initialise enemies
+                
                 
                 
 ;-----------------------------------------------------------------                

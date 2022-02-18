@@ -1,4 +1,16 @@
-﻿titlecode           sei
+﻿;***************************************
+;
+;        TASERED IN THE CROTCH!
+;
+;     A fun game by Richard Bayliss
+;
+;       (C)2022 The New Dimension
+;
+;***************************************
+
+;TITLE SCREEN CODE
+
+titlecode           sei
                       
                     ;Clear out existing IRQ interrupts
                     lda #$81
