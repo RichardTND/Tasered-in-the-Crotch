@@ -382,10 +382,13 @@ tflashok            lda #0
                     lda gflashcolour,x
                     sta $daf8,y
                     lda gflashcolour2,x 
+                   
                     sta $daf8-80,y
                     lda $d9e0,y 
                     eor #6
                     sta $d9e0,y
+                    
+                    
                     iny
                     cpy #40
                     bne .loop_t
@@ -412,10 +415,9 @@ gflashcolour2
              !byte $01,$07,$04,$02,$02,$02,$02,$02,$02,$04,$07
                     !align $ff,$00
                     !ct scr
-scrolltext          !text "          ,,, tasered in the crotch ,,,    code, design and music by richard bayliss ,,,   graphics and design by alf yngve ,,,   "
+scrolltext          !text ",,, tasered in the crotch ,,,    code, graphics, design sound effects and music by richard bayliss ,,,   logo design by alf yngve ,,,   "
                     !byte $1e,$20,$30,$2e,$30,$30 
-                    !text " the new dimension ,,,   "
-                    !text "this game is played using a joystick in port 0 ,,,   "
+                    !text " the new dimension ,,,    "
                     !text "you are chief commander supt, tracey cisco ,,,   "
                     !text "you and a team of the best officers have been sent "
                     !text "to various destinations where crime scenes are taking place ,,,   "
@@ -424,12 +426,26 @@ scrolltext          !text "          ,,, tasered in the crotch ,,,    code, desi
                     !text "to fire their tasers at the robbers and arrest them ,,,   you will "
                     !text "have a set quota before your mission is complete ,,,   your job will also "
                     !text "be to protect and serve the civilians and most definitely not taser them ,,,   robbers will also "
-                    !text "attempt to distract your officers by taking out a smoke bomb and attempt to throw them at members of the squad ,,,   "
+                    !text "attempt to distract your officers by randomly taking out a smoke bomb and attempt to throw them at members of the squad ,,,   "
                     !text "lives are lost if you "
                     !text "taser a civilian or a smoke bomb hits one of your officers ,,,   "
+                    !text "you will start on 7 lives and extra lives are awarded for every 42222 points scored unless "
+                    !text "of course your lives count is "
+                    !byte $3b
+                    !text " where you will get nothing ,,,   "
                     !text "the game is over if you let too many robbers escape or you lose "
-                    !text "all of your lives ,,,   i hope you have fun playing this game ,,,   "
-                    !text "press fire to play ,,,                                              "
+                    !text "all of your lives ,,,   controls are joystick in port 4 ,,,   pressing control on your c86 will pause game ,,,   pressing fire "
+                    !text "will upause the game ,,,   if paused, press back arrow key to return to this title screen ,,,   "
+                    !text "i do hope you like the final result of this brand new game production ,,,   i bet the title music reminds you a bit "
+                    !text "of the ocean loader, especially the gliding effect after the introduction ,,,   i would like to say a special thank you "
+                    !text "to alf yngve, for the cool logo, which i have implemented on this title screen, also for his feedback and suggestions ,,,   "
+                    !text "also i would like to say a huge thank you to martin piper, with the cool tape tool build resources ,,,   using this helped "
+                    !text "me make a loading system suited for this game ,,,    a huge thank you goes to the commodore format archive, "
+                    !text "whos twitter poll inspired me to write this game ,,,    finally a huge thank you goes specially to you, the "
+                    !text "audience, who has been supporting my projects by downloading them ,,,   and that is it, quite a lengthy scroll text "
+                    !text "but really do not care that much about it ,,,   i do hope you have loads of fun playing this crazy police "
+                    !text "force game ,,,   do not forget to look out for more new games from t,n,d in the near future ,,,   press fire to play "
+                    !text "or press spacebar to view the hi score table ,,,    thank you and good bye for now ,,,                               "
                     
                     !text "                                    "
                     

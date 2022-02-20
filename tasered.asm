@@ -20,7 +20,7 @@
         !source "macros.asm"
 ;****************************************
 
-;cheatlives = 1
+cheatlives = 1
            
 ;Import 1x2 character set data
        

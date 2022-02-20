@@ -21,6 +21,7 @@ music_init = $9000
 music_play = $9003
 sfx_play = $9006
 
+game_joystick_speed = 3
 dir_left = 0
 dir_right = 1
 boundary_left = $02

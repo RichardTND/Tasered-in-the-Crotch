@@ -54,6 +54,7 @@ init_sid        lda #$00
                 ldx #$00
 score_reset     lda #$30
                 sta score,x
+                sta virtualscore,x
                 inx
                 cpx #$06
                 bne score_reset
@@ -69,7 +70,7 @@ score_reset     lda #$30
                 sta quota+2
                 lda #$32
                 sta quota+1
-                lda #$33
+                lda #$35
                 sta lives
                 
 ;Setup game screen and hardware pointers
@@ -401,13 +402,24 @@ system_ntsc     lda #$00   ;NTSC detected
 
 ;Main gameloop
 gameloop        jsr synctimer
-                jsr sprite_animation
+                lda #1
+                bit $dc01
+                bne .nopause
+                jmp pause
+.nopause        jsr sprite_animation
                 jsr select_officer
                 jsr test_taser
                 jsr test_enemies_and_bomb
                 jsr test_collision
                 jmp gameloop 
-
+pause           lda #2
+                bit $dc01
+                beq .quit
+                lda #16
+                bit $dc00
+                bne pause
+                jmp .nopause
+.quit           jmp titlecode
 ;Synchronise timer and expand sprites 
 synctimer       lda #0
                 sta rt
@@ -521,7 +533,7 @@ loop_enemy_anim
 
 select_officer  jsr trigger_fire_taser
                 lda select_delay 
-                cmp #8
+                cmp #game_joystick_speed
                 beq select_switch
                 inc select_delay
                 rts 
@@ -688,8 +700,8 @@ enemy1_framesm  lda villain_object1
                 sta $07fa
 enemy1_coloursm lda #1
                 sta $d029
-                +enemy_properties enemy1_drag_enabled, enemy1_drag_speed, enemy1_dir, objpos+4, objpos+5, enemy1_speed, enemy1_badenemy, enemy1_framesm, enemy1_coloursm, enemy1_scoretype  
-                rts
+                +enemy_properties enemy1_drag_enabled, enemy1_drag_speed, enemy1_drag_speed_limit, enemy1_dir, objpos+4, objpos+5, enemy1_speed, enemy1_badenemy, enemy1_framesm, enemy1_coloursm, enemy1_scoretype  
+               
 ;--------------------------------------------------------------------------------
 
 ;Animate enemy 2 and also set its colour. Then check direction it is
@@ -701,8 +713,8 @@ enemy2_framesm  lda villain_object1
                 sta $07fb
 enemy2_coloursm lda #1
                 sta $d02a
-                +enemy_properties enemy2_drag_enabled, enemy2_drag_speed, enemy2_dir, objpos+6, objpos+7, enemy2_speed, enemy2_badenemy, enemy2_framesm, enemy2_coloursm, enemy2_scoretype
-                rts
+                +enemy_properties enemy2_drag_enabled, enemy2_drag_speed, enemy2_drag_speed_limit, enemy2_dir, objpos+6, objpos+7, enemy2_speed, enemy2_badenemy, enemy2_framesm, enemy2_coloursm, enemy2_scoretype
+                
 ;--------------------------------------------------------------------------------
 ;Animate enemy 3 and also set its colour. Then check direction it is
 ;allowed to move. Afterwards move the enemy that direction until it reaches
@@ -713,8 +725,8 @@ enemy3_framesm  lda villain_object1
                 sta $07fc
 enemy3_coloursm lda #1
                 sta $d02b
-                +enemy_properties enemy3_drag_enabled, enemy3_drag_speed, enemy3_dir, objpos+8, objpos+9, enemy3_speed, enemy3_badenemy, enemy3_framesm, enemy3_coloursm, enemy3_scoretype  
-                rts
+                +enemy_properties enemy3_drag_enabled, enemy3_drag_speed, enemy3_drag_speed_limit, enemy3_dir, objpos+8, objpos+9, enemy3_speed, enemy3_badenemy, enemy3_framesm, enemy3_coloursm, enemy3_scoretype  
+                
 ;--------------------------------------------------------------------------------                
 ;--------------------------------------------------------------------------------
 ;Animate enemy 4 and also set its colour. Then check direction it is
@@ -726,8 +738,8 @@ enemy4_framesm  lda villain_object1
                 sta $07fd
 enemy4_coloursm lda #1
                 sta $d02c
-                +enemy_properties enemy4_drag_enabled, enemy4_drag_speed, enemy4_dir, objpos+10, objpos+11, enemy4_speed, enemy4_badenemy, enemy4_framesm, enemy4_coloursm, enemy4_scoretype  
-                rts
+                +enemy_properties enemy4_drag_enabled, enemy4_drag_speed, enemy4_drag_speed_limit, enemy4_dir, objpos+10, objpos+11, enemy4_speed, enemy4_badenemy, enemy4_framesm, enemy4_coloursm, enemy4_scoretype  
+                
 ;--------------------------------------------------------------------------------                
 ;--------------------------------------------------------------------------------
 ;Animate enemy 5 and also set its colour. Then check direction it is
@@ -739,8 +751,8 @@ enemy5_framesm  lda villain_object1
                 sta $07fe
 enemy5_coloursm lda #1
                 sta $d02d
-                +enemy_properties enemy5_drag_enabled, enemy5_drag_speed, enemy5_dir, objpos+12, objpos+13, enemy5_speed, enemy5_badenemy, enemy5_framesm, enemy5_coloursm, enemy5_scoretype  
-                rts
+                +enemy_properties enemy5_drag_enabled, enemy5_drag_speed, enemy5_drag_speed_limit, enemy5_dir, objpos+12, objpos+13, enemy5_speed, enemy5_badenemy, enemy5_framesm, enemy5_coloursm, enemy5_scoretype  
+                
 ;--------------------------------------------------------------------------------
 ;Test enemy bomb. If the bomb is launched, it should move downwards, otherwise 
 ;the bomb is not enabled.
@@ -899,108 +911,20 @@ test_collision  lda taser_dead
                 jsr test_collider_enemy3
                 jsr test_collider_enemy4
                 jsr test_collider_enemy5
-                jsr test_collider_bomb
+                jmp test_collider_bomb
 do_no_collision                
                 rts
-                
-!macro collision_test enemyx, enemyy, enemyscoretype {
 
-                ;Collision size check (all in one)
-                
-                lda enemyx
-                cmp collision_table
-                bcc .nocollision
-                cmp collision_table+1
-                bcs .nocollision
-                lda enemyy
-                cmp collision_table+2
-                bcc .nocollision
-                cmp collision_table+3
-                bcs .nocollision
-                
-                ;Accurate position for tasered death anim
-                
-                lda enemyx
-                sta objpos+2
-                lda enemyy
-                sta objpos+3
-                lda #0
-                sta enemyy
-                lda #0
-                sta sprite_anim_delay3
-                sta sprite_anim_pointer3
-                
-                lda #1
-                sta taser_dead
-                lda enemyscoretype 
-                cmp #1
-                beq .villain1
-                cmp #2
-                beq .villain2
-                cmp #3
-                beq .villain3
-                jmp .tasered_a_civilian
-.nocollision    rts
-
-.villain1       lda #<scream1_sfx
-                ldy #>scream1_sfx
-                ldx #14
-                jsr sfx_play
-                
-                lda #<tasered100_anim
-                sta taser_sm+1
-                lda #>tasered100_anim
-                sta taser_sm+2
-                jsr deduct_quota
-                jmp score_100_points
-                
-.villain2       lda #<scream2_sfx
-                ldy #>scream2_sfx
-                ldx #14
-                jsr sfx_play 
-                
-                lda #<tasered200_anim
-                sta taser_sm+1
-                lda #>tasered200_anim
-                sta taser_sm+2
-                jsr deduct_quota
-                jmp score_200_points
-                
-.villain3       lda #<scream3_sfx
-                ldy #>scream3_sfx
-                ldx #14
-                jsr sfx_play  
-  
-                lda #<tasered500_anim
-                sta taser_sm+1
-                lda #>tasered500_anim
-                sta taser_sm+2  
-                jsr deduct_quota
-                jmp score_500_points
-                
-.tasered_a_civilian
-                
-                lda #<taseredbad_anim
-                sta taser_sm+1
-                lda #>taseredbad_anim
-                sta taser_sm+2
-                lda #<alarm_sfx
-                ldy #>alarm_sfx
-                ldx #14
-                jsr sfx_play
-                jsr deduct_lives
-                rts
-}
 test_collider_enemy1
-                +collision_test objpos+4, objpos+5, enemy1_scoretype
+                +collision_test objpos+4, objpos+5, enemy1_scoretype, enemy1_drag_enabled, enemy1_drag_speed
 test_collider_enemy2
-                +collision_test objpos+6, objpos+7, enemy2_scoretype
+                +collision_test objpos+6, objpos+7, enemy2_scoretype, enemy2_drag_enabled, enemy2_drag_speed
 test_collider_enemy3
-                +collision_test objpos+8, objpos+9, enemy3_scoretype
+                +collision_test objpos+8, objpos+9, enemy3_scoretype, enemy3_drag_enabled, enemy3_drag_speed
 test_collider_enemy4
-                +collision_test objpos+10, objpos+11, enemy4_scoretype
+                +collision_test objpos+10, objpos+11, enemy4_scoretype, enemy4_drag_enabled, enemy4_drag_speed
 test_collider_enemy5
-                +collision_test objpos+12, objpos+13, enemy5_scoretype
+                +collision_test objpos+12, objpos+13, enemy5_scoretype, enemy5_drag_enabled, enemy5_drag_speed
                 
 test_collider_bomb 
                 ;Tasering a bomb will award you 3 points 
@@ -1088,6 +1012,7 @@ clear_screen_l  lda #$20
                 sta $dae8-160,x
                 inx
                 bne clear_screen_l
+                
                 
                 ldx #$00
 put_level_comp  lda complete1,x
@@ -1181,9 +1106,10 @@ setuplevels     ldx level_pointer
                 lda level_Escapee_Count_hi,x
                 sta levelsm7+2
                 inx
-                cpx #8
+                cpx #9
                 beq loop_to_level_1
                 inc level_pointer
+                
                 jmp makelevel
                 rts
 loop_to_level_1
@@ -1226,11 +1152,15 @@ levelsm7        lda LEVEL1_Escapee_Count,x
 
 ;An enemy escapes the crimescene. Add one to the value of
 ;escapees. Then refresh the score panel with the new 
-;value.
+;value. Also check if the number of escapees match the
+;limit offset.
 
 an_enemy_has_escaped
-               
+                jsr count_escapees
+!ifdef cheatlives {     
+} else {           
                 inc escapees+1
+}
                 lda escapees+1
                 cmp #$3a
                 bne just_refresh_panel
@@ -1250,6 +1180,16 @@ escapees_default
                 jsr mask_panel
                 rts                
                 
+count_escapees  lda escapees
+                cmp escapeeslimit
+                beq checklimit2
+                rts
+checklimit2     lda escapees+1
+                cmp escapeeslimit+1
+                beq gamelost
+                rts
+gamelost        jmp game_over                
+                  
 ;--------------------------------------------------------------------------------
 ;Three civilians have been wrongfully tasered, or a bomb hits the police force. 
 ;If this happens, a life is lost.
@@ -1397,6 +1337,33 @@ addit          lda score,x
                inc score-1,x
 scoreok        dex
                bne addit
+               inc virtualscore+3
+               ldx #3
+addit2         lda virtualscore,x
+               cmp #$3a
+               bne vscok
+               lda #$30
+               sta virtualscore,x
+               inc virtualscore-1,x
+vscok          dex
+               bne addit2
+               ;Check if second digit = 2, if it does 
+               ;award an extra life to the player
+               lda virtualscore+1
+               cmp #$32
+               beq extralife
+               rts
+extralife      lda #$30
+               sta virtualscore+1
+               lda lives
+               cmp #$39
+               beq nomorelivesallowed
+               inc lives
+               ldx #14
+               lda #<extralife_sfx
+               ldy #>extralife_sfx
+               jsr sfx_play
+nomorelivesallowed                
                rts 
                
 ;Mask status panel 

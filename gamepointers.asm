@@ -40,9 +40,7 @@ arrow_anim_pointer !byte 0
 taser_anim_pointer !byte 0
 enemy_anim_pointer !byte 0
 
-enemyselectpointer !byte 0
-enemyposxselect !byte 0
-enemyposyselect !byte 0
+
 enemy1_badenemy !byte 0
 enemy2_badenemy !byte 0
 enemy3_badenemy !byte 0
@@ -68,6 +66,12 @@ enemy2_drag_speed !byte 0
 enemy3_drag_speed !byte 0
 enemy4_drag_speed !byte 0
 enemy5_drag_speed !byte 0
+
+enemy1_drag_speed_limit !byte 0
+enemy2_drag_speed_limit !byte 0
+enemy3_drag_speed_limit !byte 0
+enemy4_drag_speed_limit !byte 0
+enemy5_drag_speed_limit !byte 0
 
 randompointer !byte 0
 randx       !byte 0
@@ -96,7 +100,6 @@ taser_anim_store !byte 0
 
 pointersend
 
-randpointer !byte 0
 
              !ct scr
 level_text   !text "level "
@@ -170,9 +173,9 @@ bomby_select_table
 starttable      !byte $18,$a8
                 !byte $20,$b8
                 !byte $60,$00
-                !byte $80,$00
-                !byte $40,$00
-                !byte $10,$00
+                !byte $90,$00
+                !byte $b0,$00
+                !byte $e0,$00
                 !byte $20,$00
                 !byte $00,$00
                 
@@ -246,10 +249,13 @@ alarm_sfx
                  !byte $C3,$C4,$C5,$C6,$C7,$C8,$C9,$CA,$CB,$C0,$C1,$C2,$C3,$C4,$C5,$C6
                  !byte $C7,$C8,$C9,$CA,$CB,$C1,$11,$00
                  
+extralife_sfx    !byte $0A,$AA,$88,$C0,$41,$B1,$B2,$B3,$B4,$B5,$B6,$B7,$B8,$B9,$BA,$BB
+                 !byte $BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$11,$00
+                 
 bomb_throw_sfx   !byte $88,$88,$88,$CC,$81,$CC,$CC,$CC,$CC,$CC,$CC,$CC,$CC,$CC,$CC,$00                 
 
 bomb_explode_sfx
-                 !byte $0A,$AA,$88,$aa,$41,$cc,$81,$a8,$41,$a4,$82,$81,$cc,$cc,$cc,$cc,$cc
+                 !byte $0E,$EA,$88,$aa,$41,$cc,$81,$a8,$41,$a4,$82,$81,$cc,$cc,$cc,$cc,$cc
                  !byte $cc,$cc,$00
 ;Tables of enemy type (These will be read via value of sequence pointers)
 
@@ -304,6 +310,7 @@ randomtable       !bin "bin\randomtable.prg",,2
 ;Counters for status panel.
 
 score           !byte $30,$30,$30,$30,$30,$30
+virtualscore    !byte $30,$30,$30,$30,$30,$30
 escapees        !byte $30,$30
 escapeeslimit   !byte $39,$39
 quota           !byte $31,$30,$30 
@@ -391,6 +398,7 @@ complete2  !text "  you and your team have done a great  "
 complete3  !text " job clearing this zone from villains, "
 complete4  !text " your assignment for today is finished,"
 complete5  !text "  i shall see you on your next shift,  "
+complete6  !text "    i hope you have a nice holiday,    "
 
 hiscoretxt !text " you have also acheived a new hi score "
 
@@ -398,272 +406,5 @@ hiscoretxt !text " you have also acheived a new hi score "
 ;----------------------------------------------------------
 
 !align $ff,0   ;Level tables
-
-             
-LEVEL1_enemy_select_table
-                !byte 0,1,2,0,2,2,1,2,0,1,2,1,0,1,2,0
-                !byte 3,1,2,0,2,1,2,2,1,0,2,0,1,2,1,2
-                !byte 2,3,1,2,1,0,1,4,1,2,0,1,2,1,1,2
-                !byte 5,1,2,1,0,1,1,2,1,1,2,1,0,1,2,1
-                !byte 0,1,1,3,1,2,0,1,4,0,1,1,2,1,2,0
-
-LEVEL1_enemy_dir_select_table
-                !byte 0,1,1,0,1,0,1,1,0,1,0,1,0,1,0,1
-                !byte 0,1,1,0,0,0,1,0,0,1,1,0,0,1,0,0
-                !byte 1,0,1,0,1,1,0,1,1,0,1,0,1,0,1,0
-                !byte 1,0,0,1,0,1,0,0,0,1,0,1,0,1,0,0
-                !byte 0,1,0,1,0,0,1,0,1,0,1,0,1,0,1,1
-
-LEVEL1_enemy_speed_table 
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-
-LEVEL1_enemy_drag_active_table
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-
-LEVEL1_enemy_drag_speed_table 
-                
-                !byte 3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2
-                !byte 2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3
-                !byte 3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2
-                !byte 2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3
-                !byte 3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2
-
-LEVEL1_Quota    !byte $30,$32,$30
-LEVEL1_Escapee_Count !byte $32,$30
-
-
-             
-LEVEL2_enemy_select_table
-                !byte 2,1,0,2,2,1,0,3,0,1,4,0,1,2,1,3
-                !byte 0,2,3,4,0,2,5,1,2,2,1,3,4,1,5,2
-                !byte 2,3,2,4,1,2,3,1,0,0,0,2,2,2,1,1
-                !byte 1,5,0,3,2,3,1,4,2,1,3,2,1,2,3,1
-                !byte 3,2,4,1,4,5,2,1,2,3,4,2,1,1,3,1
-
-LEVEL2_enemy_dir_select_table
-                !byte 1,0,1,1,0,1,0,1,1,1,0,1,0,1,0,1
-                !byte 1,0,0,0,1,1,1,0,1,1,0,1,1,0,1,0
-                !byte 0,1,0,1,1,0,1,1,0,1,0,1,0,0,1,0
-                !byte 0,1,0,1,0,1,1,0,1,1,0,1,1,0,1,0
-                !byte 1,0,1,0,1,0,1,0,1,0,1,0,0,1,0,1
-
-LEVEL2_enemy_speed_table 
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-
-LEVEL2_enemy_drag_active_table
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-
-LEVEL2_enemy_drag_speed_table 
-                !byte 3,2,2,3,2,2,3,2,2,3,2,2,3,2,2,3
-                !byte 2,2,3,2,2,3,2,2,3,2,2,3,2,2,3,2
-                !byte 2,3,2,2,3,2,2,3,2,2,3,2,2,3,2,2
-                !byte 3,2,2,3,2,2,3,2,2,3,2,2,3,2,2,3
-                !byte 2,2,3,2,2,3,2,2,3,2,2,3,2,2,3,2
-                
-
-LEVEL2_Quota    !byte $30,$33,$30
-LEVEL2_Escapee_Count !byte $31,$35
-
-
-
-LEVEL3_enemy_select_table
-                !byte 1,0,2,0,1,0,2,0,4,0,2,0,3,0,1,0
-                !byte 2,1,0,2,0,1,0,3,0,1,4,0,2,0,1,2
-                !byte 3,1,0,2,0,3,0,2,4,0,4,2,3,1,3,2
-                !byte 1,3,4,2,5,1,3,4,1,2,1,3,1,2,4,5
-                !byte 1,4,3,2,1,0,2,1,0,2,0,3,2,1,4,1
-                !byte 0,1,3,2,1,2,0,5,2,1,3,1,3,2,4,5
-
-LEVEL3_enemy_dir_select_table
-                !byte 1,0,1,1,0,1,1,1,0,0,1,0,0,1,0,1
-                !byte 1,0,0,0,1,0,1,0,1,1,0,1,1,0,1,1
-                !byte 1,0,1,1,1,1,0,1,1,0,0,0,1,1,0,1
-                !byte 0,1,0,0,0,1,0,0,1,0,1,0,1,0,0,1
-                !byte 1,0,1,1,1,0,1,0,1,1,0,1,1,0,1,0
-LEVEL3_enemy_speed_table 
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-
-LEVEL3_enemy_drag_active_table
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-                !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-
-LEVEL3_enemy_drag_speed_table 
-                !byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
-                !byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
-                !byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
-                !byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
-                !byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
-                
-
-LEVEL3_Quota    !byte $30,$34,$30
-LEVEL3_Escapee_Count !byte $32,$30
-
-
-!align $ff,0
-
-level_enemy_select_table_lo
-                !byte <LEVEL1_enemy_select_table ;1
-                !byte <LEVEL2_enemy_select_table ;2
-                !byte <LEVEL3_enemy_select_table ;3
-                !byte <LEVEL1_enemy_select_table ;4
-                !byte <LEVEL1_enemy_select_table ;5
-                !byte <LEVEL1_enemy_select_table ;6
-                !byte <LEVEL1_enemy_select_table ;7
-                !byte <LEVEL1_enemy_select_table ;8
-                
-level_enemy_select_table_hi                
-                !byte >LEVEL1_enemy_select_table ;1
-                !byte >LEVEL2_enemy_select_table ;2
-                !byte >LEVEL3_enemy_select_table ;3
-                !byte >LEVEL1_enemy_select_table ;4
-                !byte >LEVEL1_enemy_select_table ;5
-                !byte >LEVEL1_enemy_select_table ;6
-                !byte >LEVEL1_enemy_select_table ;7
-                !byte >LEVEL1_enemy_select_table ;8
-                
-level_enemy_dir_select_table_lo
-                !byte <LEVEL1_enemy_dir_select_table ;1
-                !byte <LEVEL2_enemy_dir_select_table ;2 
-                !byte <LEVEL3_enemy_dir_select_table ;3
-                !byte <LEVEL1_enemy_dir_select_table ;4
-                !byte <LEVEL1_enemy_dir_select_table ;5
-                !byte <LEVEL1_enemy_dir_select_table ;6
-                !byte <LEVEL1_enemy_dir_select_table ;7
-                !byte <LEVEL1_enemy_dir_select_table ;8
-                
-level_enemy_dir_select_table_hi
-
-                !byte >LEVEL1_enemy_dir_select_table ;1
-                !byte >LEVEL2_enemy_dir_select_table ;2
-                !byte >LEVEL3_enemy_dir_select_table ;3
-                !byte >LEVEL1_enemy_dir_select_table ;4
-                !byte >LEVEL1_enemy_dir_select_table ;5
-                !byte >LEVEL1_enemy_dir_select_table ;6
-                !byte >LEVEL1_enemy_dir_select_table ;7
-                !byte >LEVEL1_enemy_dir_select_table ;8
-                
-level_enemy_speed_table_lo 
-                !byte <LEVEL1_enemy_speed_table ;1
-                !byte <LEVEL2_enemy_speed_table ;2
-                !byte <LEVEL3_enemy_speed_table ;3
-                !byte <LEVEL1_enemy_speed_table ;4
-                !byte <LEVEL1_enemy_speed_table ;5
-                !byte <LEVEL1_enemy_speed_table ;6
-                !byte <LEVEL1_enemy_speed_table ;7
-                !byte <LEVEL1_enemy_speed_table ;8
-                
-level_enemy_speed_table_hi 
-                !byte >LEVEL1_enemy_speed_table ;1
-                !byte >LEVEL2_enemy_speed_table ;2
-                !byte >LEVEL3_enemy_speed_table ;3
-                !byte >LEVEL1_enemy_speed_table ;4
-                !byte >LEVEL1_enemy_speed_table ;5
-                !byte >LEVEL1_enemy_speed_table ;6
-                !byte >LEVEL1_enemy_speed_table ;7
-                !byte >LEVEL1_enemy_speed_table ;8
-                
-level_enemy_drag_active_table_lo                
-                !byte <LEVEL1_enemy_drag_active_table ;1
-                !byte <LEVEL2_enemy_drag_active_table ;2 
-                !byte <LEVEL3_enemy_drag_active_table ;3
-                !byte <LEVEL1_enemy_drag_active_table ;4
-                !byte <LEVEL1_enemy_drag_active_table ;5
-                !byte <LEVEL1_enemy_drag_active_table ;6
-                !byte <LEVEL1_enemy_drag_active_table ;7
-                !byte <LEVEL1_enemy_drag_active_table ;8
-                
-level_enemy_drag_active_table_hi 
-                !byte >LEVEL1_enemy_drag_active_table ;1
-                !byte >LEVEL2_enemy_drag_active_table ;2
-                !byte >LEVEL3_enemy_drag_active_table ;3
-                !byte >LEVEL1_enemy_drag_active_table ;4
-                !byte >LEVEL1_enemy_drag_active_table ;5
-                !byte >LEVEL1_enemy_drag_active_table ;6
-                !byte >LEVEL1_enemy_drag_active_table ;7 
-                !byte >LEVEL1_enemy_drag_active_table ;8
-
-level_enemy_drag_speed_table_lo
-                !byte <LEVEL1_enemy_drag_speed_table ;1
-                !byte <LEVEL2_enemy_drag_speed_table ;2
-                !byte <LEVEL3_enemy_drag_speed_table ;3
-                !byte <LEVEL1_enemy_drag_speed_table ;4
-                !byte <LEVEL1_enemy_drag_speed_table ;5
-                !byte <LEVEL1_enemy_drag_speed_table ;6 
-                !byte <LEVEL1_enemy_drag_speed_table ;7
-                !byte <LEVEL1_enemy_drag_speed_table ;8
-                
-level_enemy_drag_speed_table_hi
-                !byte >LEVEL1_enemy_drag_speed_table ;1
-                !byte >LEVEL2_enemy_drag_speed_table ;2
-                !byte >LEVEL3_enemy_drag_speed_table ;3
-                !byte >LEVEL1_enemy_drag_speed_table ;4
-                !byte >LEVEL1_enemy_drag_speed_table ;5
-                !byte >LEVEL1_enemy_drag_speed_table ;6
-                !byte >LEVEL1_enemy_drag_speed_table ;7
-                !byte >LEVEL1_enemy_drag_speed_table ;8
-                
-level_quota_lo  !byte <LEVEL1_Quota ;1
-                !byte <LEVEL2_Quota ;2
-                !byte <LEVEL3_Quota ;3
-                !byte <LEVEL1_Quota ;4
-                !byte <LEVEL1_Quota ;5
-                !byte <LEVEL1_Quota ;6
-                !byte <LEVEL1_Quota ;7
-                !byte <LEVEL1_Quota ;8
-                
-level_quota_hi 
-                !byte >LEVEL1_Quota ;1
-                !byte >LEVEL2_Quota ;2
-                !byte >LEVEL3_Quota ;3
-                !byte >LEVEL1_Quota ;4
-                !byte >LEVEL1_Quota ;5
-                !byte >LEVEL1_Quota ;6
-                !byte >LEVEL1_Quota ;7
-                !byte >LEVEL1_Quota ;8
-                
-level_Escapee_Count_lo
-                
-                !byte <LEVEL1_Escapee_Count ;1
-                !byte <LEVEL2_Escapee_Count ;2
-                !byte <LEVEL3_Escapee_Count ;3
-                !byte <LEVEL1_Escapee_Count ;4
-                !byte <LEVEL1_Escapee_Count ;5
-                !byte <LEVEL1_Escapee_Count ;6
-                !byte <LEVEL1_Escapee_Count ;7
-                !byte <LEVEL1_Escapee_Count ;8
-                
-level_Escapee_Count_hi 
-
-                !byte >LEVEL1_Escapee_Count ;1
-                !byte >LEVEL2_Escapee_Count ;2
-                !byte >LEVEL3_Escapee_Count ;3
-                !byte >LEVEL1_Escapee_Count ;4
-                !byte >LEVEL1_Escapee_Count ;5
-                !byte >LEVEL1_Escapee_Count ;6
-                !byte >LEVEL1_Escapee_Count ;7
-                !byte >LEVEL1_Escapee_Count ;8
-                
-      
+!source "levels.asm"
+ 
