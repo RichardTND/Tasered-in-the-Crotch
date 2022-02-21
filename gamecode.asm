@@ -360,15 +360,42 @@ game_irq        sta gsa+1
                 asl $d019
                 lda $dc0d
                 sta $dd0d
-                lda #$fa
+                lda #$32
                 sta $d012
+                lda #$09
+                sta $d022
+                lda #$0a
+                sta $d023
                 lda #1
                 sta rt
                 jsr music_player
+                ldx #<game_irq2
+                ldy #>game_irq2
+                stx $fffe
+                sty $ffff
 gsa             lda #0
 gsx             ldx #0
 gsy             ldy #0              
 nmi             rti
+game_irq2       sta gsa2+1
+                stx gsx2+1
+                sty gsy2+1
+                asl $d019
+                lda #$c8
+                sta $d012
+                lda #$0b
+                sta $d022
+                lda #$01
+                sta $d023
+                ldx #<game_irq 
+                ldy #>game_irq 
+                stx $fffe
+                sty $ffff
+gsa2            lda #0
+gsx2            ldx #0
+gsy2            ldy #0
+                rti
+                
 
 ;PAL/NTSC music player system
 

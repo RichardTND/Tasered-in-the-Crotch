@@ -213,7 +213,7 @@ title_irq
          bne *-3
          lda #$0b
          sta $d022
-         lda #$01
+         lda #$0a
          sta $d023
          lda #$fa
          cmp $d012
@@ -423,7 +423,7 @@ scrolltext          !text ",,, tasered in the crotch ,,,    code, graphics, desi
                     !text "to various destinations where crime scenes are taking place ,,,   "
                     !text "your team are armed with the state of the art detatchable "
                     !text "wireless tasers ,,,   your mission is to command the officers "
-                    !text "to fire their tasers at the robbers and arrest them ,,,   you will "
+                    !text "to fire their tasers at the robbers and arrest them ,,,   your tasers can fire from a very good distance ,,,   you will "
                     !text "have a set quota before your mission is complete ,,,   your job will also "
                     !text "be to protect and serve the civilians and most definitely not taser them ,,,   robbers will also "
                     !text "attempt to distract your officers by randomly taking out a smoke bomb and attempt to throw them at members of the squad ,,,   "
