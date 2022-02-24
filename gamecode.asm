@@ -260,14 +260,15 @@ get_ready_loop
                 
                 jsr initenemy
                 jsr randombomb
+                
                 jmp drawgame
                 
                 
-initenemy       jsr animate_and_move_enemy1+$42
-                jsr animate_and_move_enemy2+$42
-                jsr animate_and_move_enemy3+$42
-                jsr animate_and_move_enemy4+$42
-                jsr animate_and_move_enemy5+$45
+initenemy       jsr animate_and_move_enemy1+$46
+                jsr animate_and_move_enemy2+$46
+                jsr animate_and_move_enemy3+$46
+                jsr animate_and_move_enemy4+$46
+                jsr animate_and_move_enemy5+$46
                 rts
                 
 ;Zero fill all game pointers
@@ -286,32 +287,32 @@ drawgame
 ;($0400-$07e8) 
 
                 ldx #$00
-draw_screen     lda game_screen,x
+draw_screen1    lda game_screen,x
                 sta $0400,x
-                lda game_screen+$100,x
+draw_screen2    lda game_screen+$100,x
                 sta $0500,x
-                lda game_screen+$200,x
+draw_screen3    lda game_screen+$200,x
                 sta $0600,x
-                lda game_screen+$2e8,x
+draw_screen4    lda game_screen+$2e8,x
                 sta $06e8,x
                
                 ;Include attributes
         
-                ldy game_screen,x
+                ldy $0400,x
                 lda game_attribs,y 
                 sta $d800,x
-                ldy game_screen+$100,x
+                ldy $0500,x
                 lda game_attribs,y
                 sta $d900,x
-                ldy game_screen+$200,x
+                ldy $0600,x
                 lda game_attribs,y 
                 sta $da00,x
-                ldy game_screen+$2e8,x
+                ldy $06e8,x
                 lda game_attribs,y
                 sta $dae8,x
 
                 inx
-                bne draw_screen
+                bne draw_screen1
                 jsr mask_panel
 
 ;Initialise sprite position and frame objects 
@@ -438,6 +439,7 @@ gameloop        jsr synctimer
                 jsr test_taser
                 jsr test_enemies_and_bomb
                 jsr test_collision
+                jsr animate_water
                 jmp gameloop 
 pause           lda #2
                 bit $dc01
@@ -1104,34 +1106,79 @@ levok
 ;-------------------------------------------------------------------------
 
 setuplevels     ldx level_pointer
+
+                ;Setup enemy type selection table according 
+                ;to level.
+
                 lda level_enemy_select_table_lo,x
                 sta levelsm1+1
                 lda level_enemy_select_table_hi,x
                 sta levelsm1+2
+                
+                ;Setup enemy direction selection table
+                ;according to level
+                
                 lda level_enemy_dir_select_table_lo,x
                 sta levelsm2+1
                 lda level_enemy_dir_select_table_hi,x 
                 sta levelsm2+2
+                
+                ;Setup speed of enemy movement according to level 
+                
                 lda level_enemy_speed_table_lo,x
                 sta levelsm3+1
                 lda level_enemy_speed_table_hi,x
                 sta levelsm3+2
+                
+                ;Setup drag active / not table of enemy movement according
+                ;to level.
+                
                 lda level_enemy_drag_active_table_lo,x
                 sta levelsm4+1
                 lda level_enemy_drag_active_table_hi,x 
                 sta levelsm4+2
+                
+                ;Setup delay duration of enemy movement, according to level
+                
                 lda level_enemy_drag_speed_table_lo,x
                 sta levelsm5+1
                 lda level_enemy_drag_speed_table_hi,x 
                 sta levelsm5+2
+                
+                ;Setup quota/target of criminals to hit before
+                ;level has been completed. 
+                
                 lda level_quota_lo,x
                 sta levelsm6+1
                 lda level_quota_hi,x 
                 sta levelsm6+2
+                
+                ;Set limited count of escapees before failing game
+                
                 lda level_Escapee_Count_lo,x
                 sta levelsm7+1
                 lda level_Escapee_Count_hi,x
                 sta levelsm7+2
+                
+                ;Set game screen to draw, according to level 
+                
+                lda screen2maplo1,x
+                sta draw_screen1+1
+                lda screen2maphi1,x
+                sta draw_screen1+2
+                lda screen2maplo2,x
+                sta draw_screen2+1
+                lda screen2maphi2,x
+                sta draw_screen2+2
+                lda screen2maplo3,x
+                sta draw_screen3+1
+                lda screen2maphi3,x
+                sta draw_screen3+2
+                lda screen2maplo4,x
+                sta draw_screen4+1
+                lda screen2maphi4,x
+                sta draw_screen4+2
+                
                 inx
                 cpx #9
                 beq loop_to_level_1
@@ -1142,6 +1189,8 @@ setuplevels     ldx level_pointer
 loop_to_level_1
                 ldx #$00
                 stx level_pointer 
+                lda #$31
+                sta level_no+1
                 jmp setuplevels
                 
 makelevel       ldx #$00
@@ -1184,10 +1233,8 @@ levelsm7        lda LEVEL1_Escapee_Count,x
 
 an_enemy_has_escaped
                 jsr count_escapees
-!ifdef cheatlives {     
-} else {           
+      
                 inc escapees+1
-}
                 lda escapees+1
                 cmp #$3a
                 bne just_refresh_panel
@@ -1207,10 +1254,17 @@ escapees_default
                 jsr mask_panel
                 rts                
                 
-count_escapees  lda escapees
+count_escapees 
+
+ 
+!ifdef cheatlives {     
+} else {    
+                lda escapees
                 cmp escapeeslimit
                 beq checklimit2
+}                
                 rts
+                
 checklimit2     lda escapees+1
                 cmp escapeeslimit+1
                 beq gamelost
@@ -1429,7 +1483,17 @@ puttarget       lda quota,x
                 sta lives_char_pos
                 rts
                 
-;Initialise enemies
+;Animate the water character set 
+
+animate_water   ldx #0
+anim_waterloop  lda $3800+(254*8),x
+                asl 
+                rol $3800+(254*8),x
+                inx
+                cpx #$08
+                bne anim_waterloop
+                rts
+                
                 
                 
                 

@@ -24,7 +24,10 @@
                 
 .reduce_speed
                 lda _drag_speed 
-                beq .drag_ok 
+                cmp #$00
+                bpl .drag_not_ok
+                jmp .drag_ok
+.drag_not_ok                
                 dec _drag_speed
                 rts
 .drag_ok
@@ -108,7 +111,7 @@
                 lda enemy_y_pos_table,x
                 sta _spritey
                 inx
-                cpx #99
+                cpx #LEVEL1_enemy_select_table_end-LEVEL1_enemy_select_table
                 beq .loop
                 inc randx
                 jmp .pick_new_enemy

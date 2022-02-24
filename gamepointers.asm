@@ -224,7 +224,7 @@ taseredbad_anim !byte $91,$92,$91,$92,$91,$92,$91,$92,$91,$92,$91,$92
 arrow_anim      !byte $96,$97,$98,$97,$99
 arrow_animlength
 ;Explosion animation 
-exploder_anim   !byte $9a,$9b,$9c,$9d,$9e,$9f,$ff,$ff,$ff,$ff
+exploder_anim   !byte $9a,$9b,$9c,$9d,$9e,$9f
 exploder_animlength
 
 
@@ -382,7 +382,7 @@ enemy_y_pos_table_end
                 
 !ct scr         ;0123456789012345678901234567890123456789
 
-header    !text "  chief commander supt, tracey cisco*  " 
+header    !text "  chief commander supt, tracey cisco,  " 
 mline1    !text " your officers will need to arrest 000 "
 mline2    !text "     robbers and not let 00 escape,    "
 mline3    !text "  try to avoid citizens while you can, "

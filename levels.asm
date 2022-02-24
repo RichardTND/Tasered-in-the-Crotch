@@ -13,6 +13,7 @@ LEVEL1_enemy_select_table
                 !byte 1,2,1,4,1,0,1,0,1,2,0,1,2,1,1,2
                 !byte 2,1,2,1,0,1,1,2,3,1,2,1,0,1,2,1
                 !byte 0,1,1,0,1,2,0,1,0,0,1,1,2,1,2,0
+LEVEL1_enemy_select_table_end                
 
 LEVEL1_enemy_dir_select_table
                 !byte 0,1,1,0,1,0,1,1,0,1,0,1,0,1,0,1
@@ -470,5 +471,80 @@ level_Escapee_Count_hi
                 !byte >LEVEL6_Escapee_Count ;6
                 !byte >LEVEL7_Escapee_Count ;7
                 !byte >LEVEL8_Escapee_Count ;8
+                
+screen2maplo1
+                !byte <LEVEL1_Screen
+                !byte <LEVEL2_Screen
+                !byte <LEVEL3_Screen
+                !byte <LEVEL4_Screen
+                !byte <LEVEL5_Screen
+                !byte <LEVEL6_Screen
+                !byte <LEVEL7_Screen
+                !byte <LEVEL8_Screen
+                
+screen2maphi1
+                !byte >LEVEL1_Screen
+                !byte >LEVEL2_Screen
+                !byte >LEVEL3_Screen
+                !byte >LEVEL4_Screen
+                !byte >LEVEL5_Screen
+                !byte >LEVEL6_Screen
+                !byte >LEVEL7_Screen
+                !byte >LEVEL8_Screen
+                
+screen2maplo2   !byte <LEVEL1_Screen_seg2
+                !byte <LEVEL2_Screen_seg2
+                !byte <LEVEL3_Screen_seg2
+                !byte <LEVEL4_Screen_seg2
+                !byte <LEVEL5_Screen_seg2
+                !byte <LEVEL6_Screen_seg2
+                !byte <LEVEL7_Screen_seg2
+                !byte <LEVEL8_Screen_seg2
+                
+screen2maphi2   !byte >LEVEL1_Screen_seg2
+                !byte >LEVEL2_Screen_seg2
+                !byte >LEVEL3_Screen_seg2
+                !byte >LEVEL4_Screen_seg2
+                !byte >LEVEL5_Screen_seg2
+                !byte >LEVEL6_Screen_seg2
+                !byte >LEVEL7_Screen_seg2
+                !byte >LEVEL8_Screen_seg2
+                
+screen2maplo3   !byte <LEVEL1_Screen_seg3
+                !byte <LEVEL2_Screen_seg3
+                !byte <LEVEL3_Screen_seg3
+                !byte <LEVEL4_Screen_seg3
+                !byte <LEVEL5_Screen_seg3
+                !byte <LEVEL6_Screen_seg3
+                !byte <LEVEL7_Screen_seg3
+                !byte <LEVEL8_Screen_seg3
+                
+screen2maphi3   !byte >LEVEL1_Screen_seg3
+                !byte >LEVEL2_Screen_seg3
+                !byte >LEVEL3_Screen_seg3
+                !byte >LEVEL4_Screen_seg3
+                !byte >LEVEL5_Screen_seg3
+                !byte >LEVEL6_Screen_seg3
+                !byte >LEVEL7_Screen_seg3
+                !byte >LEVEL8_Screen_seg3
+                
+screen2maplo4   !byte <LEVEL1_Screen_seg4
+                !byte <LEVEL2_Screen_seg4
+                !byte <LEVEL3_Screen_seg4
+                !byte <LEVEL4_Screen_seg4
+                !byte <LEVEL5_Screen_seg4
+                !byte <LEVEL6_Screen_seg4
+                !byte <LEVEL7_Screen_seg4
+                !byte <LEVEL8_Screen_seg4
+                
+screen2maphi4   !byte >LEVEL1_Screen_seg4
+                !byte >LEVEL2_Screen_seg4
+                !byte >LEVEL3_Screen_seg4
+                !byte >LEVEL4_Screen_seg4
+                !byte >LEVEL5_Screen_seg4
+                !byte >LEVEL6_Screen_seg4
+                !byte >LEVEL7_Screen_seg4
+                !byte >LEVEL8_Screen_seg4
+                  
                 
       

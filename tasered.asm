@@ -20,7 +20,7 @@
         !source "macros.asm"
 ;****************************************
 
-cheatlives = 1
+;cheatlives = 1
            
 ;Import 1x2 character set data
        
@@ -36,7 +36,33 @@ cheatlives = 1
         * = $9000
         !bin "bin\music.prg",,2
        
-
+;Import game map data (Uncompressed, since there is plenty of memory
+        *=$a400
+LEVEL1_Screen
+          !bin "bin\LEVEL1SCREEN.bin"
+        *=$a800
+LEVEL2_Screen        
+          !bin "bin\LEVEL2SCREEN.bin"
+        *=$ac00
+LEVEL3_Screen
+          !bin "bin\LEVEL3SCREEN.bin"
+        *=$b000
+LEVEL4_Screen
+          !bin "bin\LEVEL4SCREEN.bin"
+        *=$b400
+LEVEL5_Screen
+          !bin "bin\LEVEL5SCREEN.bin"
+        *=$b800
+LEVEL6_Screen
+          !bin "bin\LEVEL6SCREEN.bin"
+        *=$bc00
+LEVEL7_Screen
+          !bin "bin\LEVEL7SCREEN.bin"
+        *=$c000
+LEVEL8_Screen 
+          !bin "bin\LEVEL8SCREEN.bin"
+          
+        
 ;Import game sprites
         * = $2000
         !bin "bin\gamesprites.bin"
@@ -58,6 +84,8 @@ game_screen
         * = $3400
 game_attribs
         !bin "bin\gameattribs.bin"
+        * = $3400
+        !BYTE 7
         * = $3800 
 ;Game charset
         !bin "bin\charset.bin"

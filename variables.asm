@@ -45,3 +45,36 @@ scorelength = 6
 namelength = 9
 listlength = 5
 
+;Level screen parameters
+
+LEVEL1_Screen_seg2 = LEVEL1_Screen+$100
+LEVEL1_Screen_seg3 = LEVEL1_Screen+$200
+LEVEL1_Screen_seg4 = LEVEL1_Screen+$2e8
+
+LEVEL2_Screen_seg2 = LEVEL2_Screen+$100
+LEVEL2_Screen_seg3 = LEVEL2_Screen+$200
+LEVEL2_Screen_seg4 = LEVEL2_Screen+$2e8
+
+LEVEL3_Screen_seg2 = LEVEL3_Screen+$100
+LEVEL3_Screen_seg3 = LEVEL3_Screen+$200
+LEVEL3_Screen_seg4 = LEVEL3_Screen+$2e8
+
+LEVEL4_Screen_seg2 = LEVEL4_Screen+$100
+LEVEL4_Screen_seg3 = LEVEL4_Screen+$200
+LEVEL4_Screen_seg4 = LEVEL4_Screen+$2e8
+
+LEVEL5_Screen_seg2 = LEVEL5_Screen+$100
+LEVEL5_Screen_seg3 = LEVEL5_Screen+$200
+LEVEL5_Screen_seg4 = LEVEL5_Screen+$2e8
+
+LEVEL6_Screen_seg2 = LEVEL6_Screen+$100
+LEVEL6_Screen_seg3 = LEVEL6_Screen+$200
+LEVEL6_Screen_seg4 = LEVEL6_Screen+$2e8
+
+LEVEL7_Screen_seg2 = LEVEL7_Screen+$100
+LEVEL7_Screen_seg3 = LEVEL7_Screen+$200
+LEVEL7_Screen_seg4 = LEVEL7_Screen+$2e8
+
+LEVEL8_Screen_seg2 = LEVEL8_Screen+$100
+LEVEL8_Screen_seg3 = LEVEL8_Screen+$200
+LEVEL8_Screen_seg4 = LEVEL8_Screen+$2e8

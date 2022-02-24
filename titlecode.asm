@@ -208,10 +208,10 @@ title_irq
          lda #$07
          sta $d023
         
-         lda #$8c
+         lda #$ea
          cmp $d012
          bne *-3
-         lda #$0b
+         lda #$09
          sta $d022
          lda #$0a
          sta $d023
@@ -415,40 +415,29 @@ gflashcolour2
              !byte $01,$07,$04,$02,$02,$02,$02,$02,$02,$04,$07
                     !align $ff,$00
                     !ct scr
-scrolltext          !text ",,, tasered in the crotch ,,,    code, graphics, design sound effects and music by richard bayliss ,,,   logo design by alf yngve ,,,   "
+scrolltext          !text ",,, welcome to ,,, tasered in the crotch ,,,    code, graphics, design sound effects and music by richard bayliss ,,,   logo design by alf yngve ,,,   "
                     !byte $1e,$20,$30,$2e,$30,$30 
-                    !text " the new dimension ,,,    "
-                    !text "you are chief commander supt, tracey cisco ,,,   "
-                    !text "you and a team of the best officers have been sent "
-                    !text "to various destinations where crime scenes are taking place ,,,   "
-                    !text "your team are armed with the state of the art detatchable "
-                    !text "wireless tasers ,,,   your mission is to command the officers "
-                    !text "to fire their tasers at the robbers and arrest them ,,,   your tasers can fire from a very good distance ,,,   you will "
-                    !text "have a set quota before your mission is complete ,,,   your job will also "
-                    !text "be to protect and serve the civilians and most definitely not taser them ,,,   robbers will also "
-                    !text "attempt to distract your officers by randomly taking out a smoke bomb and attempt to throw them at members of the squad ,,,   "
-                    !text "lives are lost if you "
-                    !text "taser a civilian or a smoke bomb hits one of your officers ,,,   "
-                    !text "you will start on 7 lives and extra lives are awarded for every 42222 points scored unless "
-                    !text "of course your lives count is "
-                    !byte $3b
-                    !text " where you will get nothing ,,,   "
-                    !text "the game is over if you let too many robbers escape or you lose "
-                    !text "all of your lives ,,,   controls are joystick in port 4 ,,,   pressing control on your c86 will pause game ,,,   pressing fire "
-                    !text "will upause the game ,,,   if paused, press back arrow key to return to this title screen ,,,   "
-                    !text "i do hope you like the final result of this brand new game production ,,,   i bet the title music reminds you a bit "
-                    !text "of the ocean loader, especially the gliding effect after the introduction ,,,   i would like to say a special thank you "
-                    !text "to alf yngve, for the cool logo, which i have implemented on this title screen, also for his feedback and suggestions ,,,   "
-                    !text "also i would like to say a huge thank you to martin piper, with the cool tape tool build resources ,,,   using this helped "
-                    !text "me make a loading system suited for this game ,,,    a huge thank you goes to the commodore format archive, "
-                    !text "whos twitter poll inspired me to write this game ,,,    finally a huge thank you goes specially to you, the "
-                    !text "audience, who has been supporting my projects by downloading them ,,,   and that is it, quite a lengthy scroll text "
-                    !text "but really do not care that much about it ,,,   i do hope you have loads of fun playing this crazy police "
-                    !text "force game ,,,   do not forget to look out for more new games from t,n,d in the near future ,,,   press fire to play "
-                    !text "or press spacebar to view the hi score table ,,,    thank you and good bye for now ,,,                               "
-                    
-                    !text "                                    "
-                    
+                    !text " the new dimension ,,,    you are chief commander tracey cisco, a ruthless "
+                    !text "leader of the police force ,,,   the crime commissioner has reported "
+                    !text "a series of thefts that have taken place in eight different destinations "
+                    !text "around your local city ,,,   you team up with some of the best police "
+                    !text "officers ,,,   they are all armed with the newest state of the art mega detachable "
+                    !text "taser which can fire at good height and long rate ,,,   you are all standing "
+                    !text "on a very high structure and you must shoot at the robbers that attempt to make "
+                    !text "their getaway ,,,   they will occasionally throw bombs to distract your officers ,,,    "
+                    !text "also watch out for civilians ,,,    some robbers might use them as a shield ,,,   your job is to protect and serve them ,,,   "
+                    !text "if you fire a taser at a civilian or one of your officers get hit by a smoke bomb, "
+                    !text "you will lose a life ,,,   each level is completed "
+                    !text "every time you have reached your quota ,,,   extra lives are awarded for every "
+                    !byte $30,$2e,$2e,$2e,$2e,$20 
+                    !text "points scored ,,,   the game is lost everytime you either let too many villains escape "
+                    !text "or lose all five lives ,,,   let us hope you can rid your city from the "
+                    !text "crafty criminals who want to take over ,,,   controls are joystick in port two, "
+                    !text "control, pause game ,,,   back arrow, during pause mode will abort game ,,,   "
+                    !text "this game was written for fun ,,,   it was inspired by the commodore format archive "
+                    !text "twitter poll ,,,   i do hope you have loads of fun playing this game, as much as i have "
+                    !text "enjoyed making it ,,,   until next time, it is goodbye for now ,,,                  "
+                    !text "                                              "
                     !byte 0
                   
                     
