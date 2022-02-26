@@ -21,11 +21,14 @@
 ;****************************************
 
 ;cheatlives = 1
+;test_end_screen = 1
            
 ;Import 1x2 character set data
        
         *  = $0800
         !bin "bin\1x2charset.prg",,2
+        *  = $0c00
+        !fill $40,$ff
         
         ;Hi score table code
         * = $1000
@@ -97,3 +100,9 @@ game_attribs
         !source "titlecode.asm"
         !source "gamecode.asm"
 ;****************************************
+        *=$c400
+        !source "endscreen.asm"
+;****************************************
+        *=$f000
+        !bin "bin\endmusic.prg",,2
+        

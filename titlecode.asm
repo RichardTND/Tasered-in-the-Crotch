@@ -24,6 +24,10 @@ titlecode           sei
                     sta $d020
                     
                     sta fire_button
+!ifdef test_end_screen {
+                    jmp endscreen
+} else {                    
+}             
                     lda #$0b
                     sta $d011
                     

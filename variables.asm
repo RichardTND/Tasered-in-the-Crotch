@@ -19,6 +19,8 @@ game_over_jingle = 3
 mission_complete_jingle = 4
 music_init = $9000
 music_play = $9003
+end_music_init = $f000
+end_music_play = $f003
 sfx_play = $9006
 
 game_joystick_speed = 3

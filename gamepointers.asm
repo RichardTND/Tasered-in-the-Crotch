@@ -396,10 +396,8 @@ failm4     !text "  therefore you are demoted to office, "
 complete1  !text "     congratulations tracey cisco,     "
 complete2  !text "  you and your team have done a great  "
 complete3  !text " job clearing this zone from villains, "
-complete4  !text " your assignment for today is finished,"
-complete5  !text "  i shall see you on your next shift,  "
-complete6  !text "    i hope you have a nice holiday,    "
-
+complete4  !text "                                       "
+complete5  !text "         press fire to continue        "
 hiscoretxt !text " you have also acheived a new hi score "
 
 

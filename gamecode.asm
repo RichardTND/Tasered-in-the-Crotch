@@ -74,6 +74,7 @@ score_reset     lda #$30
                 sta lives
                 
 ;Setup game screen and hardware pointers
+restart_from_ending
 
                 lda #$00
                 sta $d020 
@@ -1042,6 +1043,30 @@ clear_screen_l  lda #$20
                 inx
                 bne clear_screen_l
                 
+                    lda score 
+                sec
+                lda hiscore+5
+                sbc score+5
+                lda hiscore+4
+                sbc score+4
+                lda hiscore+3
+                sbc score+3
+                lda hiscore+2
+                sbc score+2
+                lda hiscore+1
+                sbc score+1
+                lda hiscore 
+                sbc score 
+                bpl no_hiscore_recorded_end
+                
+                ldx #$00
+make_new_hi_end lda score,x
+                sta hiscore,x
+                inx
+                cpx #$06
+                bne make_new_hi_end
+                
+no_hiscore_recorded_end                
                 
                 ldx #$00
 put_level_comp  lda complete1,x
@@ -1181,17 +1206,20 @@ setuplevels     ldx level_pointer
                 
                 inx
                 cpx #9
-                beq loop_to_level_1
+                beq game_complete
                 inc level_pointer
                 
                 jmp makelevel
                 rts
+game_complete 
+                  
 loop_to_level_1
                 ldx #$00
                 stx level_pointer 
                 lda #$31
                 sta level_no+1
-                jmp setuplevels
+                jmp endscreen
+                
                 
 makelevel       ldx #$00
 levelsm1        lda LEVEL1_enemy_select_table,x

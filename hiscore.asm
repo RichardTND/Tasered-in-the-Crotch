@@ -25,6 +25,7 @@ check_hi_score
             lda #$00
             sta $d019
             sta $d01a
+            sta $d015
             lda #$00
             sta $d011
             
