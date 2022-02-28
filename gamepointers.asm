@@ -97,6 +97,7 @@ enemy5_speed !byte 1
 
 taser_dead !byte 0
 taser_anim_store !byte 0
+siren_flash_pointer !byte 0
 
 pointersend
 
@@ -252,13 +253,15 @@ alarm_sfx
 extralife_sfx    !byte $0A,$AA,$88,$C0,$41,$B1,$B2,$B3,$B4,$B5,$B6,$B7,$B8,$B9,$BA,$BB
                  !byte $BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$11,$00
                  
-bomb_throw_sfx   !byte $88,$88,$88,$CC,$81,$CC,$CC,$CC,$CC,$CC,$CC,$CC,$CC,$CC,$CC,$00                 
+bomb_throw_sfx   !byte $88,$88,$88,$CC,$11,$CC,$CB,$CA,$C9,$C8,$C7,$C6,$C5,$C4,$C3,$C2
+                 !BYTE $C1,$C0,$BF,$BE,$BD,$BC,$BB,$BA,$B9,$B8,$B7,$B6,$B5,$B4,$B3,$B2
+                 !BYTE $B1,$B0,$AF,$AE,$AD,$AC,$AA,$A9,$A8,00
 
 bomb_explode_sfx
                  !byte $0E,$EA,$88,$aa,$41,$cc,$81,$a8,$41,$a4,$82,$81,$cc,$cc,$cc,$cc,$cc
                  !byte $cc,$cc,$00
 ;Tables of enemy type (These will be read via value of sequence pointers)
-
+                   
 enemy_type_lo    !byte <villain_object1
                  !byte <villain_object2
                  !byte <villain_object3
@@ -273,6 +276,7 @@ enemy_type_hi    !byte >villain_object1
                  !byte >civilian_object2
                  !byte >civilian_object3
                  
+                
 enemy_bad_table  ;0 = good, 1 = bad
                  !byte 1
                  !byte 1
@@ -376,7 +380,30 @@ enemy_y_pos_table
                 !byte $44,$6c,$94,$44,$94,$6c,$94,$44,$44,$6c
                 !byte $94,$44,$6c,$94,$6c,$44,$6c,$94,$6c,$44
                 !byte $94,$6c,$44,$44,$94,$6c,$6c,$44,$6c,$94
-enemy_y_pos_table_end                
+enemy_y_pos_table_end   
+
+sirenflashtable 
+                !byte $06,$06,$03,$03,$01
+                !byte $01,$03,$03,$06,$06
+                !byte $02,$02,$07,$07,$01
+                !byte $01,$07,$07,$02,$02
+                !byte $06,$06,$03,$03,$01
+                !byte $01,$03,$03,$06,$06
+                !byte $02,$02,$07,$07,$01
+                !byte $01,$07,$07,$02,$02
+                !byte $06,$06,$03,$03,$01
+                !byte $01,$03,$03,$06,$06
+                !byte $02,$02,$07,$07,$01
+                !byte $01,$07,$07,$02,$02
+                !byte $06,$06,$03,$03,$01
+                !byte $01,$03,$03,$06,$06
+                !byte $02,$02,$07,$07,$01
+                !byte $01,$07,$07,$02,$02
+                
+sirenflashtableend                
+                !byte $06,$06,$03,$03,$01
+                !byte $01,$03,$03,$06,$06
+                !byte $06
                           
                 !align $ff,0
                 

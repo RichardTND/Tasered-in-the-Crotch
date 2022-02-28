@@ -44,8 +44,8 @@ LEVEL1_enemy_drag_speed_table
                 !byte 2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3
                 !byte 3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2
 
-LEVEL1_Quota    !byte $30,$32,$30
-LEVEL1_Escapee_Count !byte $32,$30
+LEVEL1_Quota    !byte $30,$33,$30
+LEVEL1_Escapee_Count !byte $30,$35
 
 
              
@@ -85,8 +85,8 @@ LEVEL2_enemy_drag_speed_table
                 !byte 2,2,3,2,2,3,2,2,3,2,2,3,2,2,3,2
                 
 
-LEVEL2_Quota    !byte $30,$33,$30
-LEVEL2_Escapee_Count !byte $31,$35
+LEVEL2_Quota    !byte $30,$34,$30
+LEVEL2_Escapee_Count !byte $30,$35
 
 
 
@@ -127,7 +127,7 @@ LEVEL3_enemy_drag_speed_table
                 
 
 LEVEL3_Quota    !byte $30,$34,$30
-LEVEL3_Escapee_Count !byte $32,$30
+LEVEL3_Escapee_Count !byte $30,$35
 
 
 
@@ -167,8 +167,8 @@ LEVEL4_enemy_drag_speed_table
                 !byte 2,2,2,1,2,2,2,1,2,2,1,2,2,2,2,2
                 
 
-LEVEL4_Quota    !byte $30,$33,$30
-LEVEL4_Escapee_Count !byte $31,$30
+LEVEL4_Quota    !byte $30,$35,$30
+LEVEL4_Escapee_Count !byte $30,$35
 
 LEVEL5_enemy_select_table
                 !byte 1,2,4,3,1,5,1,2,3,1,2,1,3,2,1,2
@@ -206,8 +206,8 @@ LEVEL5_enemy_drag_speed_table
                 
                 
 
-LEVEL5_Quota    !byte $30,$33,$30
-LEVEL5_Escapee_Count !byte $33,$30
+LEVEL5_Quota    !byte $30,$34,$30
+LEVEL5_Escapee_Count !byte $30,$35
 
 
 LEVEL6_enemy_select_table
@@ -244,8 +244,8 @@ LEVEL6_enemy_drag_speed_table
                 !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
                 !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
                 
-LEVEL6_Quota    !byte $30,$34,$30
-LEVEL6_Escapee_Count !byte $32,$30
+LEVEL6_Quota    !byte $30,$35,$30
+LEVEL6_Escapee_Count !byte $31,$35
 
 
 LEVEL7_enemy_select_table
@@ -282,8 +282,8 @@ LEVEL7_enemy_drag_speed_table
                 !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
                 !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
                 
-LEVEL7_Quota    !byte $30,$34,$30
-LEVEL7_Escapee_Count !byte $32,$35
+LEVEL7_Quota    !byte $30,$34,$35
+LEVEL7_Escapee_Count !byte $31,$35
 
 
 
@@ -321,8 +321,8 @@ LEVEL8_enemy_drag_speed_table
                 !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
                 !byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
                 
-LEVEL8_Quota    !byte $30,$35,$30
-LEVEL8_Escapee_Count !byte $35,$30
+LEVEL8_Quota    !byte $30,$34,$30
+LEVEL8_Escapee_Count !byte $36,$35
 
 
 ;----------------------------------------------------

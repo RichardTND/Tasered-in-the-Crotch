@@ -110,6 +110,8 @@
                 sta _drag_enabled
                 lda enemy_y_pos_table,x
                 sta _spritey
+                lda enemy_colour_table,x
+                sta _enemy_coloursm+1
                 inx
                 cpx #LEVEL1_enemy_select_table_end-LEVEL1_enemy_select_table
                 beq .loop
@@ -127,8 +129,7 @@
                 sta _enemy_framesm+1
                 lda enemy_type_hi,x
                 sta _enemy_framesm+2
-                lda enemy_colour_table,x
-                sta _enemy_coloursm+1
+              
                 lda enemy_bad_table,x
                 sta _enemy_badenemy
                 lda enemy_score_table,x
@@ -137,10 +138,9 @@
                 sta _drag_enabled
                 lda enemy_drag_speed_table,x
                 sta _drag_speed
-                lda enemy_y_pos_table,x
-                sta _spritey
+               
                 inx  
-                cpx #99
+                cpx #enemy_y_pos_table_end-enemy_y_pos_table
                 beq .ptrout
                 inc enemy_set_pointer
                 
@@ -274,7 +274,8 @@
                 jmp score_500_points
                 
 .tasered_a_civilian
-                
+                ldx #0
+                stx siren_flash_pointer 
                 lda #<taseredbad_anim
                 sta taser_sm+1
                 lda #>taseredbad_anim

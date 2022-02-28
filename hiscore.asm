@@ -46,7 +46,7 @@ waith2      iny
             bne waith2
             inx
             bne waith1
-            
+            jsr make_list
             ldx #$00
 next_one    lda hslo,x 
             sta $c1 
@@ -113,7 +113,7 @@ last_score  ldx $02
             sta $d1
             lda nmhi,x
             sta $d2 
-            jsr make_list
+            
             jmp name_entry 
             
 place_new_score
@@ -128,6 +128,7 @@ put_name    lda name,y
             sta ($d1),y
             dey 
             bpl put_name
+            jsr SaveHiScore
            
 no_hiscore  jmp display_hi_scores
 
@@ -269,7 +270,7 @@ letter_down   dec letter_char
               lda letter_char
               beq space_char
               lda letter_char 
-              cmp #29 
+              cmp #31 
               beq end_char 
               rts
 space_char    lda #32
@@ -524,25 +525,25 @@ name !text "richard b"
 hiscorestart
 !ct scr
 rank1      !text "  1. "
-name1      !text "richard b"
+name1      !text "richard  "
            !text " ................. "
-hiscore1   !text "000000 "
+hiscore1   !text "022000 "
 rank2      !text "  2. "
-name2      !text "richard b"
+name2      !text "alf      "
            !text " ................. "
-hiscore2   !text "000000 "
+hiscore2   !text "016000 "
 rank3      !text "  3. "
-name3      !text "richard b"
+name3      !text "zzap     "
            !text " ................. "
-hiscore3   !text "000000 "
+hiscore3   !text "012000 "
 rank4      !text "  4. "
-name4      !text "richard b"
+name4      !text "sixty    "
            !text " ................. "
-hiscore4   !text "000000 "
+hiscore4   !text "008800 "
 rank5      !text "  5. "
-name5      !text "richard b"
+name5      !text "four     "
            !text " ................. "
-hiscore5   !text "000000 "
+hiscore5   !text "004400 "
 hiscoreend
 
           ;!text "0123456789012345678901234567890123456789"

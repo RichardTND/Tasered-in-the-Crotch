@@ -68,7 +68,7 @@ full_clear          lda #$00
                     sta $0500,x
                     sta $0600,x
                     sta $06e8,x
-                    lda #$0f
+                    lda #$09
                     sta $d800,x
                     sta $d900,x
                     sta $da00,x
@@ -102,7 +102,7 @@ getloop             lda #$08
                     ldx #$00
 square              lda #$30
                     sta $07f8,x
-                    lda #0
+                    lda #00
                     sta $d027,x
                     inx
                     cpx #$08
@@ -130,7 +130,8 @@ square              lda #$30
                     sta $d01d
                     lda #0
                     sta $d017
-                    sta $d01b 
+                    sta $d01b
+                    sta $d01c 
                     lda #%11100000
                     sta $d010
                     lda #$8e
@@ -251,7 +252,8 @@ endirq3             sta esa3+1
                     asl $d019
                     lda #$8e
                     sta $d012
-                    nop
+                   
+                     nop
                     nop
                     nop
                     nop
@@ -289,8 +291,8 @@ endirq4             sta esa4+1
                     stx $d016
                     sty $d018
                     
-                    ldx #$09
-                    ldy #$08
+                    ldx #$0c
+                    ldy #$0f
                     stx $d022
                     sty $d023
              ;       lda #3
@@ -330,8 +332,8 @@ endirq5             sta esa5+1
                     ldy #$12
                     stx $d016
                     sty $d018
-                    ldx #$09
-                    ldy #$08
+                    ldx #$03
+                    ldy #$0d
                     stx $d022
                     sty $d023
               ;      lda #4
@@ -594,6 +596,9 @@ skip                rts
 continue_playing_game
                     lda #0
                     sta fire_button
+                    sta $d01b
+                    sta $d01d
+                    sta $d017
                     sei
                     lda #$81
                     sta $dc0d
@@ -726,36 +731,24 @@ endscroll !scr "congratulations tracey cisco,           "
           !scr "                                        "
           !scr "  copyright (c) 2022 the new dimension  "
           !scr "                                        "
-          !scr "               - warning -              "
+          !scr " a huge thank you goes to everybody who "
+          !scr "  has been involved with this project.  "
           !scr "                                        "
-          !scr "tasered in the crotch was downloaded for"
-          !scr "free from - the new dimension - and     "
-          !scr "richard.tnd.itch-io.                    "
+          !scr "i do hope you have had fun playing this "
+          !scr "little game.                            "
           !scr "                                        "
-          !scr "this production is freeware, which means"
-          !scr "you are welcome to copy, improve, modify"
-          !scr "this production. however you are not    "
-          !scr "allowed to sell any part of this        "
-          !scr "production in digital or physical form  "
-          !scr "without written permission from the game"
-          !scr "author.                                 "
+          !scr "press fire to restart level 1, with your"
+          !scr "score and lives still intact, otherwise "
+          !scr "press spacebar to exit ...              "
           !scr "                                        "
-          !scr "if anyone would like to make a cool     "
-          !scr "sequel to this production, please feel  "
-          !scr "free to do so, as long you credit the   "
-          !scr "author for the original game idea.      "
-          !scr "                                        " 
-          !scr "press fire to play on with current score"
-          !scr "and lives, or press spacebar to exit.   "
-          !scr "                                        " 
-          !scr "                                        " 
-          !scr "                                        " 
-          !scr "                                        " 
+          !scr "                                        "
+        
           !byte 0
           
 
 ;--------------------------------------------------------          
           ;Import end logo matrix
+          !fill $ff,$00
           *=$ec00
 end_logo_matrix
           

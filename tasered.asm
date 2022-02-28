@@ -33,7 +33,8 @@
         ;Hi score table code
         * = $1000
         !source "hiscore.asm"
-        
+        !align $ff,0
+        !source "diskaccess.asm"
 
 ;Import music data 
         * = $9000
@@ -95,6 +96,7 @@ game_attribs
 ;****************************************
         * = $4000
         jsr pal_ntsc_check
+        jsr LoadHiScores
         lda #$35
         sta $01
         !source "titlecode.asm"

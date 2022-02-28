@@ -164,6 +164,12 @@ white               lda #$01
                     sta $d01b 
                     lda #%11100000
                     sta $d010
+                    ldx #$00
+copyhiscore1        lda hiscore1,x
+                    sta hiscore,x
+                    inx
+                    cpx #6
+                    bne copyhiscore1
                     
                     
                     
@@ -204,39 +210,95 @@ title_irq
          asl $d019
          lda $dc0d
          sta $dd0d
-         lda #$3a
-         cmp $d012 
-         bne *-3
-         lda #$02
-         sta $d022
-         lda #$07
-         sta $d023
-        
-         lda #$ea
-         cmp $d012
-         bne *-3
-         lda #$09
-         sta $d022
-         lda #$0a
-         sta $d023
-         lda #$fa
-         cmp $d012
-         bne *-3
-         lda #$03
-         sta $d011
-         lda #$fc
-         cmp $d012
-         bne *-3
+         lda #$36
+         sta $d012
          lda #$1b
          sta $d011
-         jsr music_player
-         jsr title_loop
-.tsa     lda #0
-.tsx     ldx #0
-.tsy     ldy #0
+       
+         
+       
+         ldx #<title_irq1
+         ldy #>title_irq1
+         stx $fffe
+         sty $ffff
+.tsa     lda #$00
+.tsx     ldx #$00
+.tsy     ldy #$00
          rti
+         
+title_irq1 
+         sta .tsa1+1
+         stx .tsx1+1
+         sty .tsy1+1
+         asl $d019 
+         lda #$92 
+         sta $d012
+         ldx #$02
+         ldy #$07 
+         stx $d022
+         sty $d023
+         ldx #<title_irq2
+         ldy #>title_irq2
+         stx $fffe
+         sty $ffff
+.tsa1    lda #$00
+.tsx1    ldx #$00
+.tsy1    ldy #$00
+         rti
+         
+title_irq2
+         sta .tsa2+1
+         stx .tsx2+1
+         sty .tsy2+1
+         asl $d019
+         lda #$f8
+         sta $d012
+         lda #$1b
+         sta $d011
+          ldx #$09
+         ldy #$0a
+         stx $d022
+         sty $d023
+           lda #1
+         sta rt
+         jsr music_player
+         ldx #<title_irq3
+         ldy #>title_irq3
+         stx $fffe
+         sty $ffff
+.tsa2    lda #0
+.tsx2    ldx #0
+.tsy2    ldy #0
+         rti
+         
+title_irq3
+         sta .tsa3+1
+         stx .tsx3+1
+         sty .tsy3+1
+         asl $d019
+         lda #$ff
+         sta $d012
+         lda #$00
+         sta $d011
+           ldx #$09
+         ldy #$0a
+         stx $d022
+         sty $d023
+         ldx #<title_irq
+         ldy #>title_irq
+         stx $fffe
+         sty $ffff
+.tsa3    lda #0
+.tsx3    ldx #0
+.tsy3    ldy #0
+         rti
+         
 ;Main title screen loop
-title_loop          jsr sprite_scroll
+title_loop          lda #0
+                    sta rt
+                    cmp rt
+                    beq *-3
+                    jsr sprite_scroll
                     
                     lda $dc00
                     lsr
@@ -262,7 +324,7 @@ t_jp1               lda $dc01
                     bvc t_jp2
                     jmp display_hi_scores
                     
-t_jp2               rts               
+t_jp2               jmp title_loop             
 
 ;The sprite scroll, masked from the scroll routine
 

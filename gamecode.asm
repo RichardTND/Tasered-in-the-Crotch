@@ -72,7 +72,7 @@ score_reset     lda #$30
                 sta quota+1
                 lda #$35
                 sta lives
-                
+                jsr mask_panel
 ;Setup game screen and hardware pointers
 restart_from_ending
 
@@ -141,10 +141,12 @@ restart_from_ending
                 sta $d01a
                 
                 cli
+                lda #$0b
+                sta $d011
 start_next_level   
                 jsr initpointers ;Initialise all pointers 
                 
-                
+                jsr mask_panel
                 lda #get_ready_jingle
                 jsr music_init
                 lda #0
@@ -164,6 +166,7 @@ clearscreen     lda #$20
                 inx
                 bne clearscreen
                 jsr setuplevels
+                
                 jsr mask_panel
                 ldx #$00
 copy_panel_screen
@@ -232,6 +235,9 @@ fetch_quotas
                 sec
                 sbc #2
                 sta escapees_intro_pos+1
+                jsr mask_panel
+                lda #$1b
+                sta $d011
                 ldx #$00
 grloop1         ldy #$00
                 iny
@@ -239,7 +245,7 @@ grloop1         ldy #$00
                 inx
                 bne grloop1
                 
-                jsr mask_panel
+               
                 
                 
 get_ready_loop                
@@ -352,6 +358,8 @@ initspritepos   lda starttable,x
                 sta enemy5_speed 
                 lda #$20 
                 sta taser_x_store
+                ldx #sirenflashtableend-sirenflashtable-1
+                stx siren_flash_pointer 
 hold            jmp gameloop
 
 ;Main IRQ raster interrupt player for game_restart
@@ -364,10 +372,19 @@ game_irq        sta gsa+1
                 sta $dd0d
                 lda #$32
                 sta $d012
-                lda #$09
-                sta $d022
-                lda #$0a
-                sta $d023
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                ldx #$09
+                ldy #$0a
+                stx $d022
+                sty $d023
                 lda #1
                 sta rt
                 jsr music_player
@@ -385,10 +402,10 @@ game_irq2       sta gsa2+1
                 asl $d019
                 lda #$c8
                 sta $d012
-                lda #$0b
-                sta $d022
-                lda #$01
-                sta $d023
+                ldx #$0b
+                ldy #$01
+                stx $d022
+                sty $d023
                 ldx #<game_irq 
                 ldy #>game_irq 
                 stx $fffe
@@ -431,7 +448,7 @@ system_ntsc     lda #$00   ;NTSC detected
 
 ;Main gameloop
 gameloop        jsr synctimer
-                lda #1
+                lda #4
                 bit $dc01
                 bne .nopause
                 jmp pause
@@ -441,6 +458,7 @@ gameloop        jsr synctimer
                 jsr test_enemies_and_bomb
                 jsr test_collision
                 jsr animate_water
+                jsr siren_flasher
                 jmp gameloop 
 pause           lda #2
                 bit $dc01
@@ -870,7 +888,7 @@ animate_and_move_bomb
                 sta $d02e
                 lda objpos+15
                 clc
-                adc #2
+                adc #1
                 cmp #$c8
                 bcc update_bomb_y
                 lda #0
@@ -885,7 +903,8 @@ animate_and_move_bomb
                 ldy #>bomb_explode_sfx 
                 ldx #7
                 jsr sfx_play
-                
+                ldx #0
+                stx siren_flash_pointer 
                 lda #<alarm_sfx
                 ldy #>alarm_sfx 
                 ldx #14
@@ -1065,6 +1084,17 @@ make_new_hi_end lda score,x
                 inx
                 cpx #$06
                 bne make_new_hi_end
+                
+                    ldx #$00
+new_hi_message2  lda hiscoretxt,x
+                sta $04a0+480,x
+                lda #5
+                sta $d8a0+480,x
+                inx
+                cpx #40
+                bne new_hi_message2
+                jsr mask_panel
+                
                 
 no_hiscore_recorded_end                
                 
@@ -1523,6 +1553,30 @@ anim_waterloop  lda $3800+(254*8),x
                 rts
                 
                 
+;Siren flash routine
+
+siren_flasher   ldx siren_flash_pointer                
+                lda sirenflashtable,x
+                sta $db78
+                sta $db79
+                sta $db78+40
+                sta $db79+40
+                lda sirenflashtable+10,x
+                sta $db8e
+                sta $db8f
+                sta $db8e+40
+                sta $db8f+40
+                inx 
+                cpx #sirenflashtableend-sirenflashtable
+                beq stopsiren
+                inc siren_flash_pointer
+                rts
+stopsiren
+                ldx #sirenflashtableend-sirenflashtable-1
+                stx siren_flash_pointer 
+              
+                
+                rts
                 
                 
 ;-----------------------------------------------------------------                
